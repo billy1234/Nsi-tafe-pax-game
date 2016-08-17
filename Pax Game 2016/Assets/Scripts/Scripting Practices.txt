@@ -1,0 +1,15 @@
+				--scripting practices--
+
+
+
+all scripts must be named with a capital letter for each new word and no symbols
+ie  PlayerJumpScript
+
+all variables and fucntions must use camelcase (the first letter for every new word but first )
+
+ie camelCaseBool, learnCamelCase
+
+all public funtions MUST be documented using the xml coments (///) explaing what they documentedhot to use
+them ect
+
+all scripts must have the name of the author under the #includes
