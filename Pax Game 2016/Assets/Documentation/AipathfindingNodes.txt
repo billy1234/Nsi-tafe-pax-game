@@ -1,0 +1,2 @@
+all this script does is collate all the nodes either stored in the array or childed
+to it and sends them to the aipathfinding scripts so the ai have some points to walk too

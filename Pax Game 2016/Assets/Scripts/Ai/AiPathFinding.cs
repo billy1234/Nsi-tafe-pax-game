@@ -11,10 +11,11 @@ public class AiPathFinding : MonoBehaviour
     /// all ai share the same patrol nodes
     /// </summary>
     public static Transform[] patrolNodes;
-    public Transform node;
+    private Transform node;
     private NavMeshAgent myNavMeshAgent;
     private AiBase aiBase;
     public float fleeSpeed =1f;
+    public float nodeWidth = 3f;
     public void Awake()
     {
         aiBase = gameObject.GetComponent<AiBase>();
@@ -24,7 +25,7 @@ public class AiPathFinding : MonoBehaviour
 
     public void patrol()
     {
-        if (node == null)
+        if (node == null || (transform.position - node.position).magnitude < nodeWidth)
         {
             node = patrolNodes[Random.Range(0, patrolNodes.Length)];
         }

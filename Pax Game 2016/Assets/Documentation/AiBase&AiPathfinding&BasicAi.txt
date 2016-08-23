@@ -1,0 +1,20 @@
+Ai Base
+
+this abstract class handles all common ai behavior
+	it handles and changes its state (patrol, atack, kite back)
+	it has its own recursive loop ailoop so every x seconds it may evaluate its
+		surroundings outside of uptdate, fixedupdate ect
+	it has its own abstract event methords for when the unit finds or losses a
+	target 
+	it also will tell the aipathfinding script to move but the aipathfinding script is not 
+	required (so this can be used on turrets ect)
+	
+	
+	
+Ai Pathfinding
+	just a wrapper class that will alow any implementation of base ai
+	to move, patrol(to the pre set nodes specified in a stattic array)
+	and kite back(walk away from the player)
+
+Basic Ai
+	a super basic implementation of the AiBase class with no added features
