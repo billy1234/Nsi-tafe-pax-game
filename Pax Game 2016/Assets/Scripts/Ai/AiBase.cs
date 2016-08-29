@@ -6,7 +6,7 @@ using UnityEditor;
 
 public enum aiState
 {
-    PATROL, ATTACK, KITE_BACK, CUSTOM_STATE
+    PATROL, ATTACK, TARGET_IN_MIN, CUSTOM_STATE
 };
 
 
@@ -80,65 +80,64 @@ public abstract class AiBase : MonoBehaviour
     /// <returns></returns>
     IEnumerator aiTick()
     {
-        float targetDistance;
 		yield return new WaitForSeconds(Random.Range(0f,unitTickRate)); //stop all the ai syncing
         while (gameObject.active)
         {
 			yield return new WaitForSeconds(unitTickRate);
-			if (state == aiState.CUSTOM_STATE)
-			{
-				print ("custom state");
-				onCustomState();
-			} 
-			else
-			{
-				print ("state: " + state);
-				if (target != null) //if i have a target
-				{
-					targetDistance = Mathf.Abs ((transform.position - target.position).magnitude);
-					if (targetDistance < minRange)
-					{
-						OnTargetInMin ();
-					} 
-					else
-					{
-						onAttack ();
-					}
-
-				} 
-				else
-				{
-					onPatrol ();
-				} 
-			}
+            if (state == aiState.CUSTOM_STATE)
+            {
+                print("custom state");
+                OnCustomState();
+            }
+            else if (target != null)            //if we have a target
+            {
+              
+                if (targetInMin())  //target is both in range and in min range
+                {
+                    OnTargetInMin();
+                }
+                else                            //target is in range
+                {
+                    OnTargetInRange();
+                }
+            }
+            else //if we have no target and are not in a custom ai state
+            {
+                OnPatrol();
+            }
         }
     }
-	protected virtual void onCustomState()
+
+    protected bool targetInMin()
+    {
+        return (Mathf.Abs((transform.position - target.position).magnitude) < minRange);
+    }
+
+
+	protected virtual void OnCustomState()
 	{
 		//no custom state in base
 	}
-	protected virtual void onPatrol()
+	protected virtual void OnPatrol()
     {
         //print("patroling");
         target = null;
         state = aiState.PATROL;
         if (pathfinding != null)
         {
-			print ("memes ey");
             pathfinding.patrol();
         }
     }
 	protected virtual void OnTargetInMin()
     {
-        state = aiState.KITE_BACK;
+        state = aiState.TARGET_IN_MIN;
         if (pathfinding != null)
         {
-            pathfinding.kiteBack();
+            pathfinding.kiteBack(target.position);
         }
     }
-	protected virtual void onAttack()
+	protected virtual void OnTargetInRange()
     {
-        state = aiState.ATTACK;
         if (pathfinding != null)
         {
             pathfinding.walkTowardTarget();
@@ -167,7 +166,10 @@ public abstract class AiBase : MonoBehaviour
     /// <summary>
     /// the colider event when the target leaves range
     /// </summary>
-    protected abstract void OnLoseTarget();
+    protected virtual void OnLoseTarget()
+    {
+        target = null;
+    }
 
     #endregion
 
@@ -184,7 +186,7 @@ public abstract class AiBase : MonoBehaviour
 	{
 		if (col.transform == target)
 		{            
-			target = null;
+			
 			OnLoseTarget();
 		}
 	}

@@ -32,41 +32,42 @@ public class MeleAiBarge : AiBase
 
     protected override void OnLoseTarget()
 	{
-		myRend.material.color = neutralColor;
-		//print
-		if (rb.isKinematic)
-		{
-			//print ("is this loss");
-			myRend.material.color = neutralColor;
+        if (Mathf.Abs((transform.position - target.position).magnitude) > maxRange)
+        {
+            target = null;
+            myRend.material.color = neutralColor;
+            rb.isKinematic = true;
+            pathfinding.activatePathfinding();
+            myRend.material.color = neutralColor;
+            state = aiState.PATROL;
+        }
 
-			state = aiState.PATROL;
-		}
     }
 
-	protected override void onPatrol ()
+	protected override void OnPatrol ()
 	{
 		myRend.material.color = neutralColor;
-		if (rb.isKinematic)
-		{
-			base.onPatrol ();
-		}
+       
+		base.OnPatrol ();
 	}
 
-	protected override void onAttack ()
+	protected override void OnTargetInRange ()
 	{
 		myRend.material.color = Color.red;
 		if (rb.isKinematic)
 		{
 			
-			base.onAttack ();
+			base.OnTargetInRange ();
 		}
+
 	}
 
 	protected override void OnTargetInMin()
 	{
-		rb.isKinematic = false;
+        rb.isKinematic = false;
 		state = aiState.CUSTOM_STATE;
-		pathfinding.turnOffPathfinding();
+		pathfinding.deactivatePathfinding();
+
 	}
 		
 	void meleAttack()
@@ -80,22 +81,13 @@ public class MeleAiBarge : AiBase
 		//throw new NotImplementedException ();
 	}
 		
-	protected override void onCustomState ()
+	protected override void OnCustomState ()
 	{
 		myRend.material.color = Color.green;
-		if ((target.position - transform.position).magnitude < minRange)
-		{		
-
-			if(UnityEngine.Random.Range(0,lungeChance) == lungeChance -1)
-			{				
-				meleAttack ();
-			}
-		} 
-		else
-		{
-			pathfinding.turnOnPathfinding();
-			state = aiState.ATTACK;
-		}
+	    if(UnityEngine.Random.Range(0,lungeChance) == lungeChance -1)
+	    {				
+		    meleAttack ();
+	    }
 	}
 
 	IEnumerator cooldownLunge()
