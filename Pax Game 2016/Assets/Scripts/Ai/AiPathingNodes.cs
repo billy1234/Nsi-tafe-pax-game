@@ -11,10 +11,10 @@ public class AiPathingNodes : MonoBehaviour
 {
 
     public List<Transform> pathfindingNodes;
-    public bool addAllChildern;
+    public bool addAllChildren;
 	void Awake ()
     {
-        if (addAllChildern)
+        if (addAllChildren)
         {
             pathfindingNodes.Clear();
             pathfindingNodes.AddRange(gameObject.GetComponentsInChildren<Transform>());
