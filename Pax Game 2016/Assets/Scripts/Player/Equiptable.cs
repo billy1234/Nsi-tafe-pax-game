@@ -53,13 +53,13 @@ public abstract class Equiptable : MonoBehaviour
 		return deductAmmo (1,ref ammoType);
 	}
 
-	protected virtual void equip()
+	public virtual void equip()
 	{
-		gameObject.SetActive (true);
+		enabled = true;
 	}
 
-	protected virtual void deEquip()
+	public virtual void deEquip()
 	{
-		gameObject.SetActive (false);
+		enabled =false;
 	}
 }

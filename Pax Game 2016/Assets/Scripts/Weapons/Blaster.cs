@@ -8,15 +8,18 @@ public class Blaster : Equiptable
 	public Transform barrel;
 	public KeyCode shoot;
 	public float projectileSpeed;
+	public CoolDown cd;
 	void Update () 
 	{
 		if (Input.GetKey (shoot))
 		{
-			
-			if (deductAmmo (ref resources.blasterAmmo))
+			if(cd.checkFire())
 			{
-				print ("bang");
-				launchBullet ();
+				if (deductAmmo (ref resources.blasterAmmo))
+				{
+					cd.fire ();
+					launchBullet ();
+				}
 			}
 
 		}	

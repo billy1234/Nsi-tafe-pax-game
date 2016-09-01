@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ForcePush : MonoBehaviour
+public class ForcePush : Equiptable
 {
     #region Variables
     [Header("Force")]
     public float forceStr = 150f;
+    public float energyPerSec = 0.05f;
     [Header("Object Movement")]
     [Range(0f, 1f)]
     public float dampFactor = 0.9f;
@@ -16,19 +17,16 @@ public class ForcePush : MonoBehaviour
     public LayerMask lifatbleObjects;
 
     public Transform cameraPos;
-    private Collider hitCollider;
     private Rigidbody targetObject;
-    // private List<Rigidbody> targetObjects = new List<Rigidbody>();
     private Color targetCol;
     private Renderer targetRend;
 
     [Header("ProjectileSettings")]
     public VelocityProjectile.velocityProjectileInfo projectileInfo;
 
-
     public Vector3 GetSingularityPosition()
     {
-        return (transform.position + transform.forward * singularityDistance);
+        return (cameraPos.position + cameraPos.forward * singularityDistance);
     }
     #endregion
     private void Update()
@@ -44,7 +42,16 @@ public class ForcePush : MonoBehaviour
     private void FixedUpdate()
     {
         if (targetObject != null)
-            MoveObject();
+        {
+            if (deductEnergy(Time.deltaTime * energyPerSec))
+            {
+                MoveObject();
+            }
+            else
+            {
+                DropObject();
+            }
+        }
     }
     private void GetObject()
     {
@@ -82,11 +89,18 @@ public class ForcePush : MonoBehaviour
         if (targetObject != null)
         {
             targetObject.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
-            if (targetRend != null)
-            {
-                targetRend.material.color = targetCol;
-            }
-            targetObject = null;
+            DropObject();
         }
+    }
+
+    void DropObject()
+    {
+        if (targetRend != null)
+        {
+            targetRend.material.color = targetCol;
+        }
+        targetRend = null;
+        targetCol = Color.white;
+        targetObject = null;
     }
 }

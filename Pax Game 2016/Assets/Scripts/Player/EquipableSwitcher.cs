@@ -3,19 +3,35 @@ using System.Collections;
 
 public class EquipableSwitcher : MonoBehaviour
 {
-	public equiptableInfo[] equiptables;
+	public equiptableInfo telekenisis;
+	public equiptableInfo blaster;
+
+	[System.Serializable]
 	public struct equiptableInfo
 	{
-		public bool unlocked;
+		public bool locked;
+		public KeyCode equiptKey;
 		public Equiptable equiptable;
 	}
-	// Use this for initialization
-	void Start () {
+
 	
+
+	void Update ()
+	{
+		if(!telekenisis.locked && Input.GetKeyDown(telekenisis.equiptKey))
+		{
+			deEquipAll();
+			telekenisis.equiptable.equip();
+		}
+		else if(!blaster.locked && Input.GetKeyDown(blaster.equiptKey))
+		{
+			deEquipAll();
+			blaster.equiptable.equip();
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	private void deEquipAll()
+	{
+		telekenisis.equiptable.deEquip();
+		blaster.equiptable.deEquip();
 	}
 }
