@@ -22,6 +22,7 @@ public class DamageOnCollide : WeaponBase
             
             onHit();
         }
+		onColide ();
        
     }
 
@@ -32,4 +33,9 @@ public class DamageOnCollide : WeaponBase
             myCol.enabled = false;
         }
     }
+	protected virtual void onColide()
+	{
+
+
+	}
 }

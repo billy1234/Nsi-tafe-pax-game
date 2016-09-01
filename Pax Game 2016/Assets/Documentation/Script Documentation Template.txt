@@ -1,4 +1,4 @@
-Discription;
+Description;
 
 Instructions;
 

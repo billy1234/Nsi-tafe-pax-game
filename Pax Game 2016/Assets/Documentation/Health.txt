@@ -1,17 +1,17 @@
-Discription; a heath class for all objects that will take damage
+Description; a health class for all objects that will take damage
 
 Instructions;
 
 -to set unit hp- just set maxHp in inspector and the hp will become this at start
 
--Using health events- first write the behavior in a seperate script then refence the
+-Using health events- first write the behaviour in a seperate script then reference the
 desired health script and += the function to the desired events-
 
-	example;(in awake if posible)  myHealth.OnDie += turnScrreenRed;
+	example;(in awake if posible)  myHealth.OnDie += turnScreenRed;
 	
-	turn scrren red being a void function in a seperate script
+	turn screen red being a void function in a seperate script
 	myHealth being a Health Script note how += was used rather than
-	= to prevent earlier behaviors from being removed
+	= to prevent earlier behaviousrs from being removed
 
 -to damage/heal- simply modify hp
 

@@ -3,7 +3,7 @@ using System.Collections;
 
 
 [RequireComponent(typeof(Rigidbody))]
-public class VelocityProjectile : Projectile
+public class VelocityProjectile : DamageOnCollide
 {
     [System.Serializable]
     public struct velocityProjectileInfo

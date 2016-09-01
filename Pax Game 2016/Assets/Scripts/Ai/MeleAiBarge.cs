@@ -13,6 +13,8 @@ public class MeleAiBarge : AiBase
 	private bool canLunge = true;
 	public int lungeChance = 5;
 	public float standUpVelocity =1f;
+
+	public voidEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
     private void Start()
     {
         base.Start();
@@ -20,6 +22,10 @@ public class MeleAiBarge : AiBase
 		rb = GetComponent<Rigidbody> ();
 		rb.isKinematic = true;
         neutralColor = myRend.material.color;
+		if (OnWalk != null)
+		{
+			OnWalk ();
+		}
     }
     protected override void OnAquireTarget()
     {
@@ -40,6 +46,10 @@ public class MeleAiBarge : AiBase
             pathfinding.activatePathfinding();
             myRend.material.color = neutralColor;
             state = aiState.PATROL;
+			if (OnWalk != null)
+			{
+				OnWalk ();
+			}
         }
 
     }

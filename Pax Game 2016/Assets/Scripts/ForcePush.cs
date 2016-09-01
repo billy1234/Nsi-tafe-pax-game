@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class ForcePush : MonoBehaviour
 {
@@ -16,7 +15,8 @@ public class ForcePush : MonoBehaviour
     public float singularityRadius = 1f;
     public LayerMask lifatbleObjects;
 
-    private Collider[] hitColliders;
+    public Transform cameraPos;
+    private Collider hitCollider;
     private Rigidbody targetObject;
     // private List<Rigidbody> targetObjects = new List<Rigidbody>();
     private Color targetCol;
@@ -35,11 +35,10 @@ public class ForcePush : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GetObject();
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            PushObjects();
+            if (targetObject == null)
+                GetObject();
+            else
+                PushObjects();
         }
     }
     private void FixedUpdate()
@@ -47,43 +46,34 @@ public class ForcePush : MonoBehaviour
         if (targetObject != null)
             MoveObject();
     }
-
     private void GetObject()
     {
-        hitColliders = Physics.OverlapSphere(GetSingularityPosition(), singularityRadius, lifatbleObjects.value);
-        foreach (Collider col in hitColliders)
+        RaycastHit hit;
+        if (Physics.Raycast(cameraPos.position, cameraPos.forward, out hit, 100f, lifatbleObjects.value))
         {
-            Rigidbody rb = col.GetComponent<Rigidbody>();
+            Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 if (targetObject != null)
                 {
                     targetRend.material.color = targetCol;
                 }
-
                 targetObject = rb;
                 targetObject.gameObject.AddComponent<VelocityProjectile>().setInfo(projectileInfo);
-                // trun the object blue
                 targetRend = rb.gameObject.GetComponent<Renderer>();
                 targetCol = targetRend.material.color;
                 targetRend.material.color = Color.blue;
-                //
-                break;
             }
         }
     }
-
     private void MoveObject()
     {
         Vector3 lastFrame = GetSingularityPosition();
-
         Vector3 offset = lastFrame - targetObject.position;
-
         if (targetObject.velocity.magnitude > maxObjectVelocity)
         {
             targetObject.velocity = targetObject.velocity * dampFactor;
         }
-
         targetObject.AddForce(offset, ForceMode.Impulse);
 
     }
@@ -91,10 +81,12 @@ public class ForcePush : MonoBehaviour
     {
         if (targetObject != null)
         {
-            targetObject.AddForce(transform.forward * forceStr, ForceMode.Impulse);            
-            targetRend.material.color = targetCol;
+            targetObject.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
+            if (targetRend != null)
+            {
+                targetRend.material.color = targetCol;
+            }
             targetObject = null;
         }
     }
- 
 }

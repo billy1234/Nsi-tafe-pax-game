@@ -8,23 +8,14 @@ public class PlayerRescources : MonoBehaviour
 
 	void Start()
 	{
-	
+		blasterAmmo.initalize ();
 		energy.amount = 0;
 	}
 
 	void Update()
 	{
 		energy.incrementTime (Time.deltaTime);
-		if (Input.anyKey)
-		{
-			if (energy.checkEnergy (0.1f)) {
-				energy.amount -= 0.1f;
-			} 
-			else 
-			{
-				print ("ey");
-			}
-		}
+
 	}
 
 
@@ -85,11 +76,17 @@ public class PlayerRescources : MonoBehaviour
 		}
 	}
 
+	[System.Serializable]
 	public class Ammo
 	{
+		public bool unlimited;
 		public int maxAmmo;
-
 		private int currentAmmo;
+
+		public void initalize()
+		{
+			currentAmmo = maxAmmo;
+		}
 
 		private void changeAmmo(int value)
 		{
@@ -111,6 +108,10 @@ public class PlayerRescources : MonoBehaviour
 		}
 		public bool checkAmmo(int amount)
 		{
+			if (unlimited)
+			{
+				return true;
+			}
 			return(currentAmmo - amount >= 0);
 
 		}
@@ -121,6 +122,10 @@ public class PlayerRescources : MonoBehaviour
 		}
 		public void useAmmo(int amount)
 		{
+			if (unlimited) 
+			{
+				return;
+			}
 			if (checkAmmo (amount)) {
 				currentAmmo = currentAmmo - amount;
 			} 
