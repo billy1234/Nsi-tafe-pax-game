@@ -26,39 +26,36 @@ public class AiPathFinding : MonoBehaviour
     public void patrol()
     {
         if (node == null || (transform.position - node.position).magnitude < nodeWidth)
-        {
-            node = patrolNodes[Random.Range(0, patrolNodes.Length)]; //get a new node
-        }
-        else
-        {
-            myNavMeshAgent.SetDestination(node.position);
-        }
+            {
+                node = patrolNodes[Random.Range(0, patrolNodes.Length)]; //get a new node
+            }
+            else
+            {
+                myNavMeshAgent.SetDestination(node.position);
+            }
     }
 
     public void walkTowardTarget()
 	{
-        myNavMeshAgent.SetDestination(aiBase.target.position);
+            myNavMeshAgent.SetDestination(aiBase.target.position);
     }
 
     public void kiteBack(Vector3 area)
-    {
-		
-		//turnOnPathfinding ();
-        myNavMeshAgent.ResetPath();
-        myNavMeshAgent.Move((transform.position - area).normalized * fleeSpeed); 
+    {      
+            myNavMeshAgent.ResetPath();
+            myNavMeshAgent.Move((transform.position - area).normalized * fleeSpeed);
     }
 		
 
 	public void deactivatePathfinding()
 	{
-		//myNavMeshAgent.Stop();
 		myNavMeshAgent.enabled = false;
 	}
 
 	public void activatePathfinding()
-	{		
-		myNavMeshAgent.enabled = true;
-		myNavMeshAgent.Resume ();
+	{
+            myNavMeshAgent.enabled = true;
+            myNavMeshAgent.Resume();
 	}
 	
 }

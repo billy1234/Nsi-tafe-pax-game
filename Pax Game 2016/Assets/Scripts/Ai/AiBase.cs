@@ -15,9 +15,10 @@ public abstract class AiBase : MonoBehaviour
 
     
 
-    //[HideInInspector]
-    public aiState state = aiState.PATROL;
-	//[HideInInspector]
+
+    protected aiState state = aiState.PATROL;
+
+
     public Transform target;
 
     [Tooltip("The max range this unit will atack from before getting closer")]
@@ -81,12 +82,18 @@ public abstract class AiBase : MonoBehaviour
     IEnumerator aiTick()
     {
 		yield return new WaitForSeconds(Random.Range(0f,unitTickRate)); //stop all the ai syncing
-        while (gameObject.active)
-        {
-			yield return new WaitForSeconds(unitTickRate);
+
+        while (enabled)
+        {		
+
+            if (target!= null && !target.gameObject.activeSelf)
+            {
+                OnTargetDisabled();
+            }
+
+
             if (state == aiState.CUSTOM_STATE)
             {
-                print("custom state");
                 OnCustomState();
             }
             else if (target != null)            //if we have a target
@@ -105,6 +112,7 @@ public abstract class AiBase : MonoBehaviour
             {
                 OnPatrol();
             }
+            yield return new WaitForSeconds(unitTickRate);
         }
     }
 
@@ -118,6 +126,11 @@ public abstract class AiBase : MonoBehaviour
 	{
 		//no custom state in base
 	}
+
+    protected virtual void OnTargetDisabled()
+    {
+        target = null;
+    }
 	protected virtual void OnPatrol()
     {
         //print("patroling");
@@ -153,7 +166,7 @@ public abstract class AiBase : MonoBehaviour
     /// <param name="seenObject"></param>
     protected virtual bool targetNewUnit(GameObject seenObject)
     {
-		return(seenObject.name == "enemy");
+		return(seenObject.name == "Character");
         //return true;
     }
 

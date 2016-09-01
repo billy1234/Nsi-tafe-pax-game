@@ -8,7 +8,6 @@ public class DisableOnDie : MonoBehaviour
 
     void Awake()
     {
-
         h = gameObject.GetComponent<Health>();     
         h.OnDie += Disable;
 
@@ -17,6 +16,7 @@ public class DisableOnDie : MonoBehaviour
 
     void Disable()
     {
+        //print(this.gameObject.name + " died");
         this.gameObject.SetActive(false);
     }
 }

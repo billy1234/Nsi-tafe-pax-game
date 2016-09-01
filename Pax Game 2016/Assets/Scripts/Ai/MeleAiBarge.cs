@@ -32,7 +32,7 @@ public class MeleAiBarge : AiBase
 
     protected override void OnLoseTarget()
 	{
-        if (Mathf.Abs((transform.position - target.position).magnitude) > maxRange)
+        if (target == null || Mathf.Abs((transform.position - target.position).magnitude) > maxRange)
         {
             target = null;
             myRend.material.color = neutralColor;
@@ -83,6 +83,10 @@ public class MeleAiBarge : AiBase
 		
 	protected override void OnCustomState ()
 	{
+        if (target == null)
+        {
+            OnLoseTarget();
+        }
 		myRend.material.color = Color.green;
 	    if(UnityEngine.Random.Range(0,lungeChance) == lungeChance -1)
 	    {				

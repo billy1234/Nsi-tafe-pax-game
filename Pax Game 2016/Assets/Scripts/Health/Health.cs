@@ -10,14 +10,14 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Max health this unit can hold
     /// </summary>
-    public int MaxHp;
+    public int MaxHp = 100;
     /// <summary>
     /// current health
     /// </summary>
     [HideInInspector]
     public int hp   {
                     get { return _hp; }
-                    set { _hp = value; }
+                    set { changeHp(value); }
                     }
 
     private int _hp;
@@ -29,7 +29,7 @@ public class Health : MonoBehaviour
     public voidEvent OnDie, OnTakeDamage, OnHeal;
     #endregion
 
-    void Start()
+    void Awake()
     {
         _hp = MaxHp;
     }
@@ -37,6 +37,7 @@ public class Health : MonoBehaviour
 
     private void changeHp(int newHp)
     {
+        
         if (newHp > _hp)
         {
             runEvent(OnHeal);
@@ -53,7 +54,8 @@ public class Health : MonoBehaviour
 
             _hp = MaxHp;
         }
-        else if (_hp <= 0)
+
+        if (_hp <= 0)
         {
             runEvent(OnDie);
             _hp = 0;
