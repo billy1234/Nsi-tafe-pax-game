@@ -2,20 +2,29 @@
 using System.Collections;
 public class PlayerRescources : MonoBehaviour
 {
-
+    public UiSlider energySlider;
 	public Energy energy;
 	public Ammo blasterAmmo;
 
+    void Awake()
+    {
+        energySlider.getValue = getEnergy;
+    }
+
+    float getEnergy()
+    {
+        return energy.amount;
+    }
+
 	void Start()
 	{
-		blasterAmmo.initalize ();
-		energy.amount = 0;
+		blasterAmmo.initalize();
 	}
 
 	void Update()
 	{
 		energy.incrementTime (Time.deltaTime);
-
+        energySlider.update();
 	}
 
 

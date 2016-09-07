@@ -6,6 +6,6 @@ public class Bullet : DamageOnCollide
 
 	protected override void onColide ()
 	{
-		gameObject.SetActive (false);
+		gameObject.SetActive(false);
 	}
 }

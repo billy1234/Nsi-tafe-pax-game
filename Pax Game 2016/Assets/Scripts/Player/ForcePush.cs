@@ -7,6 +7,7 @@ public class ForcePush : Equiptable
     [Header("Force")]
     public float forceStr = 150f;
     public float energyPerSec = 0.05f;
+    public float pushEnergy = 0.2f;
     [Header("Object Movement")]
     [Range(0f, 1f)]
     public float dampFactor = 0.9f;
@@ -61,15 +62,15 @@ public class ForcePush : Equiptable
             Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                if (targetObject != null)
+                if (deductEnergy(Time.deltaTime * energyPerSec))
                 {
-                    targetRend.material.color = targetCol;
+                    DropObject();
+                    targetObject = rb;
+                    targetObject.gameObject.AddComponent<VelocityProjectile>().setInfo(projectileInfo);
+                    targetRend = rb.gameObject.GetComponent<Renderer>();
+                    targetCol = targetRend.material.color;
+                    targetRend.material.color = Color.blue;
                 }
-                targetObject = rb;
-                targetObject.gameObject.AddComponent<VelocityProjectile>().setInfo(projectileInfo);
-                targetRend = rb.gameObject.GetComponent<Renderer>();
-                targetCol = targetRend.material.color;
-                targetRend.material.color = Color.blue;
             }
         }
     }
@@ -89,6 +90,7 @@ public class ForcePush : Equiptable
         if (targetObject != null)
         {
             targetObject.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
+            deductEnergy(pushEnergy);
             DropObject();
         }
     }
@@ -102,5 +104,10 @@ public class ForcePush : Equiptable
         targetRend = null;
         targetCol = Color.white;
         targetObject = null;
+    }
+
+    void OnDisable()
+    {
+        DropObject();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 using System;
 
@@ -14,7 +15,7 @@ public class MeleAiBarge : AiBase
 	public int lungeChance = 5;
 	public float standUpVelocity =1f;
 
-	public voidEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
+	public UnityEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
     private void Start()
     {
         base.Start();
@@ -24,7 +25,7 @@ public class MeleAiBarge : AiBase
         neutralColor = myRend.material.color;
 		if (OnWalk != null)
 		{
-			OnWalk ();
+			OnWalk.Invoke ();
 		}
     }
     protected override void OnAquireTarget()
@@ -48,7 +49,7 @@ public class MeleAiBarge : AiBase
             state = aiState.PATROL;
 			if (OnWalk != null)
 			{
-				OnWalk ();
+				OnWalk.Invoke();
 			}
         }
 

@@ -7,7 +7,7 @@ public class AIAnimScript : MonoBehaviour
 	
 	void Awake ()
     {
-		gameObject.GetComponent<MeleAiBarge> ().OnWalk += runAnimation;
+		//gameObject.GetComponent<MeleAiBarge> ().OnWalk.AddListener(runAnimation);
     }
 
     public void runAnimation()
