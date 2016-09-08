@@ -89,6 +89,7 @@ public class ForcePush : Equiptable
     {
         if (targetObject != null)
         {
+			targetObject.velocity = Vector3.zero;
             targetObject.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
             deductEnergy(pushEnergy);
             DropObject();
