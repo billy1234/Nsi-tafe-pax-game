@@ -15,6 +15,7 @@ public class ForcePush : Equiptable
     [Header("Singularity")]
     public float singularityDistance = 5f;
     public float singularityRadius = 1f;
+	public float sphereCastWidth =1f;
     public LayerMask lifatbleObjects;
 
     public Transform cameraPos;
@@ -22,8 +23,6 @@ public class ForcePush : Equiptable
     private Color targetCol;
     private Renderer targetRend;
 
-    [Header("ProjectileSettings")]
-    public VelocityProjectile.velocityProjectileInfo projectileInfo;
 
     public Vector3 GetSingularityPosition()
     {
@@ -57,7 +56,7 @@ public class ForcePush : Equiptable
     private void GetObject()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cameraPos.position, cameraPos.forward, out hit, 100f, lifatbleObjects.value))
+		if (Physics.SphereCast(cameraPos.position,sphereCastWidth, cameraPos.forward, out hit, 100f, lifatbleObjects.value))
         {
             Rigidbody rb = hit.transform.GetComponent<Rigidbody>();
             if (rb != null)
@@ -66,7 +65,6 @@ public class ForcePush : Equiptable
                 {
                     DropObject();
                     targetObject = rb;
-                    targetObject.gameObject.AddComponent<VelocityProjectile>().setInfo(projectileInfo);
                     targetRend = rb.gameObject.GetComponent<Renderer>();
                     targetCol = targetRend.material.color;
                     targetRend.material.color = Color.blue;

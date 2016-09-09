@@ -24,6 +24,10 @@ public class VelocityProjectile : DamageOnCollide
     protected override void damageUnit(Health unit, int damage)
     {
         damage = Mathf.Clamp( Mathf.RoundToInt(myRb.velocity.magnitude / maxDamagevelocity  * myRb.mass) * damage, 0,damage);
+		if (myRb.velocity.magnitude == 0)
+		{
+			damage = 0;
+		}
         base.damageUnit(unit, damage);
         
     }
