@@ -13,7 +13,7 @@ public class ShatterOnDeath : MonoBehaviour
 
 	void Awake()
     {
-        gameObject.GetComponent<Health>().OnDie += shatterMesh;
+        gameObject.GetComponent<Health>().OnDie.AddListener(shatterMesh);
 	}
 	
 

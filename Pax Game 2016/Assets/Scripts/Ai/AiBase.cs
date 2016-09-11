@@ -18,7 +18,7 @@ public abstract class AiBase : MonoBehaviour
 
     protected aiState state = aiState.PATROL;
 
-
+    [HideInInspector]
     public Transform target;
 
     [Tooltip("The max range this unit will atack from before getting closer")]

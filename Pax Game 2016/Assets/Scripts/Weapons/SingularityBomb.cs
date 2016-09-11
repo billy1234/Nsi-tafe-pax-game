@@ -9,15 +9,17 @@ public class SingularityBomb : MonoBehaviour
 	public float size = 1f; //of the explosion
 	public float minVortexSize =1f;
 	public float maxVortexSize = 5f;
-	public float vortexRadius =3f;
+	protected float vortexRadius =3f;
 	public float vortexPulseSpeed = 1f;
 	public float spinSpeed = 1f;
 	public float vortextPushPullStrength =1f;
 	public float maxDebrisVelocity = 10f;
 	public float duration = 10f;
 	public float explosionForce = 10f;
-	private bool enabled = false;
-	public UnityEvent onExplode,onActivate;
+    public float imposionForce = 10f;
+    public float imporsionWait = 0.5f;
+	private bool active = false;
+	public UnityEvent onExplode,onImplode,onActivate;
 	private List<Rigidbody> affectedBodys;
 
 	Vector3 debrisPos;
@@ -29,12 +31,12 @@ public class SingularityBomb : MonoBehaviour
 	private IEnumerator begin()
 	{
 		aquireRbs();
-		enabled = true;
+		active = true;
 		onActivate.Invoke ();
 		yield return new WaitForSeconds (duration);
-		enabled = false;
-		explode ();
-		gameObject.SetActive (false);
+		active = false;
+		StartCoroutine(explode ());
+		
 
 	}
 	void OnEnable () 
@@ -67,14 +69,21 @@ public class SingularityBomb : MonoBehaviour
 
 	void FixedUpdate () 
 	{
-		if (enabled)
+		if (active)
 		{
 			swirlVortex (transform.position);
 		}
 	}
 
-	void explode()
+	IEnumerator explode()
 	{
+        onImplode.Invoke();
+        for (int i = 0; i < affectedBodys.Count; i++)
+        {
+            affectedBodys[i].velocity = Vector3.zero;
+            affectedBodys[i].AddForce((transform.position - affectedBodys[i].position).normalized * imposionForce, ForceMode.Force);
+        }
+        yield return new WaitForSeconds(imporsionWait);
 		for(int i =0; i < affectedBodys.Count; i++)
 		{
 			affectedBodys [i].AddForce((affectedBodys[i].position - transform.position).normalized * explosionForce,ForceMode.Impulse);
@@ -83,7 +92,8 @@ public class SingularityBomb : MonoBehaviour
 		}
 		affectedBodys.Clear ();
 		onExplode.Invoke ();
-	}
+        gameObject.SetActive(false);
+    }
 
 	void swirlVortex(Vector3 position)
 	{
@@ -114,7 +124,7 @@ public class SingularityBomb : MonoBehaviour
 	private Vector3 pushAlongCircle(Vector3 circlePoint, Vector3 debrisPosition,Vector3 debrisForward)
 	{
 		Vector3 dirToCircle = (circlePoint - debrisPosition).normalized;
-		return  (Quaternion.Euler (transform.up) * dirToCircle) * spinSpeed;
+		return  (Quaternion.Euler(transform.up) * dirToCircle) * spinSpeed;
 	}
 
 	/*

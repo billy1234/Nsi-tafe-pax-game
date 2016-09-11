@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 
 public delegate void voidEvent();
 
 public class Health : MonoBehaviour
 {
-
+    public UnityEvent OnDie, OnTakeDamage, OnHeal;
     #region variables
     /// <summary>
     /// Max health this unit can hold
@@ -26,7 +27,6 @@ public class Health : MonoBehaviour
     /// If you have a behavior you wish to trigger += it to these events
     /// idealy in awake, DO NOT call these events it will not cause death healing ect
     /// </summary>
-    public voidEvent OnDie, OnTakeDamage, OnHeal;
     #endregion
 
     void Awake()
@@ -40,11 +40,11 @@ public class Health : MonoBehaviour
         
         if (newHp > _hp)
         {
-            runEvent(OnHeal);
+            OnHeal.Invoke();
         }
         else if(newHp < _hp)
         {
-            runEvent(OnTakeDamage);
+            OnTakeDamage.Invoke();
         }
 
         _hp = newHp;
@@ -57,16 +57,10 @@ public class Health : MonoBehaviour
 
         if (_hp <= 0)
         {
-            runEvent(OnDie);
+            OnDie.Invoke();
             _hp = 0;
         }
     }
 
-    private void runEvent(voidEvent e)
-    {
-        if (e != null)
-        {
-            e();
-        }
-    }
+  
 }

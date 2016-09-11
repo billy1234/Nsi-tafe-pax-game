@@ -8,8 +8,8 @@ public class DisableOnDie : MonoBehaviour
 
     void Awake()
     {
-        h = gameObject.GetComponent<Health>();     
-        h.OnDie += Disable;
+        h = gameObject.GetComponent<Health>();
+        h.OnDie.AddListener(Disable);
 
     }
 

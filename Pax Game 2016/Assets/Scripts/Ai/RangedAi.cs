@@ -6,21 +6,17 @@ public class RangedAi : AiBase
 {
 
 	private Color neutralColor;
-	private Rigidbody rb;
 	private Renderer myRend;
-	public float lungeDistance = 0.1f;
-	public float lungeCd = 2f;
-	private bool canLunge = true;
-	public int lungeChance = 5;
-	public float standUpVelocity =1f;
+    public float turnSmoothing;
+    public float turnStateUpdateSpeed =0.05f;
+    public UnityEvent onFire;
+    private bool turn = true;
 
 	public UnityEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
 	private void Start()
 	{
 		base.Start();
 		myRend = GetComponentInChildren<Renderer>();
-		rb = GetComponent<Rigidbody> ();
-		rb.isKinematic = true;
 		neutralColor = myRend.material.color;
 		if (OnWalk != null)
 		{
@@ -29,10 +25,7 @@ public class RangedAi : AiBase
 	}
 	protected override void OnAquireTarget()
 	{
-		if (rb.isKinematic)
-		{
 			myRend.material.color = Color.red;
-		}
 
 	}
 
@@ -42,7 +35,6 @@ public class RangedAi : AiBase
 		{
 			target = null;
 			myRend.material.color = neutralColor;
-			rb.isKinematic = true;
 			pathfinding.activatePathfinding();
 			myRend.material.color = neutralColor;
 			state = aiState.PATROL;
@@ -64,35 +56,36 @@ public class RangedAi : AiBase
 	protected override void OnTargetInRange ()
 	{
 		myRend.material.color = Color.red;
-		if (rb.isKinematic)
-		{
-
-			base.OnTargetInRange ();
-		}
+        pathfinding.deactivatePathfinding();
+        turn = true;
+        state = aiState.CUSTOM_STATE;
 
 	}
 
-	protected override void OnTargetInMin()
+
+	void rangedAttack()
 	{
-		rb.isKinematic = false;
-		state = aiState.CUSTOM_STATE;
-		pathfinding.deactivatePathfinding();
+     
 
 	}
 
-	void meleAttack()
-	{
 
-		if (canLunge) 
-		{
-			rb.AddForce(( target.position - transform.position).normalized * lungeDistance, ForceMode.Force);
-			StartCoroutine (cooldownLunge ());
-		}
-		//throw new NotImplementedException ();
-	}
+
+    /// <summary>
+    /// verry hacky turn logic
+    /// </summary>
+    void turnToTarget()
+    {
+        Quaternion myRotation = transform.rotation;
+        //only changing transform here as i can not instanciate a new transform class and then use the lookat function
+        transform.LookAt(target,Vector3.up);
+        transform.rotation =  Quaternion.Slerp(myRotation, transform.rotation,Time.deltaTime * turnSmoothing);
+
+    }
 
 	protected override void OnCustomState ()
 	{
+        /*
 		if (target == null)
 		{
 			OnLoseTarget();
@@ -100,32 +93,21 @@ public class RangedAi : AiBase
 		myRend.material.color = Color.green;
 		if(UnityEngine.Random.Range(0,lungeChance) == lungeChance -1)
 		{				
-			meleAttack ();
+			rangedAttack ();
 		}
+       */
+        pathfinding.enabled = false;
+        turnToTarget();
+        onFire.Invoke();
 	}
 
-	IEnumerator cooldownLunge()
-	{
-		canLunge = false;
-		yield return new WaitForSeconds(lungeCd);
-		canLunge = true;
-	}
+    void Update()
+    {
+        if (turn)
+        {
+            turnToTarget();
+        }
+    }
 
-	void OnCollisionStay(Collision col)
-	{
-		if (rb.velocity.magnitude < standUpVelocity)
-		{
-			if (target == null) 
-			{
-				rb.isKinematic= true;
-				return;
-			}
-			if ((target.position - transform.position).magnitude > maxRange) 
-			{
-				rb.isKinematic= true;
-			}
 
-		}
-
-	}
 }

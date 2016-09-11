@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class Equiptable : MonoBehaviour
 {
-	public PlayerRescources resources;
+	protected PlayerRescources resources;
 
 
 	protected void Awake()
