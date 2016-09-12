@@ -86,7 +86,7 @@ public abstract class AiBase : MonoBehaviour
         while (enabled)
         {		
 
-            if (target!= null && !target.gameObject.activeSelf)
+            if (target != null && !target.gameObject.activeSelf)
             {
                 OnTargetDisabled();
             }
@@ -96,7 +96,8 @@ public abstract class AiBase : MonoBehaviour
             {
                 OnCustomState();
             }
-            else if (target != null)            //if we have a target
+
+            if (target != null)            //if we have a target
             {
               
                 if (targetInMin())  //target is both in range and in min range

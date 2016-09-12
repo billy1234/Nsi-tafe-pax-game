@@ -62,8 +62,14 @@ public class RangedAi : AiBase
 
 	}
 
+    protected override void OnTargetInMin()
+    {
+        pathfinding.activatePathfinding();
+        base.OnTargetInMin();
+    }
 
-	void rangedAttack()
+
+    void rangedAttack()
 	{
      
 

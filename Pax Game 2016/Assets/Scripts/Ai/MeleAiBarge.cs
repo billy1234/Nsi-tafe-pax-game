@@ -57,9 +57,12 @@ public class MeleAiBarge : AiBase
 
 	protected override void OnPatrol ()
 	{
-		myRend.material.color = neutralColor;
-       
-		base.OnPatrol ();
+        if (state != aiState.CUSTOM_STATE)
+        {
+            myRend.material.color = neutralColor;
+
+            base.OnPatrol();
+        }
 	}
 
 	protected override void OnTargetInRange ()
