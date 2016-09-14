@@ -13,6 +13,7 @@ public class RangedAi : AiBase
     private bool turn = true;
 
 	public UnityEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
+
 	private void Start()
 	{
 		base.Start();
@@ -34,6 +35,7 @@ public class RangedAi : AiBase
 		if (target == null || Mathf.Abs((transform.position - target.position).magnitude) > maxRange)
 		{
 			target = null;
+			turn = false;
 			myRend.material.color = neutralColor;
 			pathfinding.activatePathfinding();
 			myRend.material.color = neutralColor;
@@ -67,43 +69,24 @@ public class RangedAi : AiBase
         pathfinding.activatePathfinding();
         base.OnTargetInMin();
     }
-
-
-    void rangedAttack()
-	{
-     
-
-	}
+		
 
 
 
-    /// <summary>
-    /// verry hacky turn logic
-    /// </summary>
+
     void turnToTarget()
-    {
-        Quaternion myRotation = transform.rotation;
-        //only changing transform here as i can not instanciate a new transform class and then use the lookat function
-        transform.LookAt(target,Vector3.up);
-        transform.rotation =  Quaternion.Slerp(myRotation, transform.rotation,Time.deltaTime * turnSmoothing);
+	{
+		Vector3 lookPos = target.position - transform.position;
+		lookPos.y = 0f;
+		Quaternion lookRoation = Quaternion.LookRotation (lookPos);
+        
+		transform.rotation =  Quaternion.Slerp(lookRoation, transform.rotation,Time.deltaTime * turnSmoothing);
 
     }
 
 	protected override void OnCustomState ()
 	{
-        /*
-		if (target == null)
-		{
-			OnLoseTarget();
-		}
-		myRend.material.color = Color.green;
-		if(UnityEngine.Random.Range(0,lungeChance) == lungeChance -1)
-		{				
-			rangedAttack ();
-		}
-       */
-        pathfinding.enabled = false;
-        turnToTarget();
+		pathfinding.deactivatePathfinding ();
         onFire.Invoke();
 	}
 

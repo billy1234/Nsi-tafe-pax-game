@@ -11,7 +11,8 @@ public class CharacterMovement : MonoBehaviour
     public float jumpForce = 8f;
     [Header("Camera")]
     public float mouseSensitivity = 2.5f;
-
+	public float maxVelocity = 3f;
+	public float maxCameraRotation = 90, minCameraRotation =  -90;
     // Movement
     private Vector3 moveDirection;
     private Rigidbody rigid;
@@ -29,11 +30,15 @@ public class CharacterMovement : MonoBehaviour
         mainCamera = GameObject.FindObjectOfType<Camera>().transform;
         LockCursor(true);
     }
-    private void Update()
+    private void FixedUpdate()
     {
         HandleMovement();
-        HandleRotation();
+       
     }
+	private void LateUpdate()
+	{
+		HandleRotation();
+	}
     private void HandleMovement()
     {
         float hInput = Input.GetAxisRaw("Horizontal");
@@ -48,22 +53,31 @@ public class CharacterMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 rigid.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+				if (rigid.velocity.magnitude > maxVelocity) 
+				{
+					rigid.velocity = rigid.velocity.normalized * maxVelocity;
+				}
                 isGrounded = false;
                 isJumping = true;
             }
         }
 
-        rigid.MovePosition(transform.position + moveDirection * Time.deltaTime);
+		rigid.AddForce(moveDirection * Time.fixedDeltaTime * movementSpeed,ForceMode.VelocityChange);
     }
     private void HandleRotation()
     {
-        yaw += Input.GetAxis("Mouse X") * mouseSensitivity;
-        pitch += Input.GetAxis("Mouse Y") * mouseSensitivity;
+		if(Input.GetAxis("Mouse X") == 0 && Input.GetAxis("Mouse Y") == 0)
+		{
+			return;
+		}
+		yaw 	+= Input.GetAxis("Mouse X") * mouseSensitivity;
+		pitch 	+= -Input.GetAxis("Mouse Y") * mouseSensitivity;
+		pitch 	= Mathf.Clamp (pitch ,minCameraRotation,maxCameraRotation)				;
 
-        transform.eulerAngles = new Vector3(0, yaw, 0);
-        mainCamera.transform.eulerAngles = new Vector3(-pitch, yaw, 0);
+		transform.rotation = Quaternion.Euler (0f,yaw,0f);
+		mainCamera.rotation = Quaternion.Euler (pitch,yaw,0f);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape))
         {
             LockCursor(false);
         }

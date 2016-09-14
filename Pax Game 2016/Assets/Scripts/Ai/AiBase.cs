@@ -147,7 +147,7 @@ public abstract class AiBase : MonoBehaviour
         state = aiState.TARGET_IN_MIN;
         if (pathfinding != null)
         {
-            pathfinding.kiteBack(target.position);
+			pathfinding.kiteBack(target.position,unitTickRate);
         }
     }
 	protected virtual void OnTargetInRange()

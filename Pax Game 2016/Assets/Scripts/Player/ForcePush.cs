@@ -19,7 +19,7 @@ public class ForcePush : Equiptable
     public LayerMask lifatbleObjects;
 
     public Transform cameraPos;
-    private Rigidbody targetObject;
+    private Rigidbody targetRb;
     private Color targetCol;
     private Renderer targetRend;
 
@@ -33,7 +33,7 @@ public class ForcePush : Equiptable
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (targetObject == null)
+            if (targetRb == null)
                 GetObject();
             else
                 PushObjects();
@@ -41,7 +41,7 @@ public class ForcePush : Equiptable
     }
     private void FixedUpdate()
     {
-        if (targetObject != null)
+        if (targetRb != null)
         {
             if (deductEnergy(Time.deltaTime * energyPerSec))
             {
@@ -64,7 +64,8 @@ public class ForcePush : Equiptable
                 if (deductEnergy(Time.deltaTime * energyPerSec))
                 {
                     DropObject();
-                    targetObject = rb;
+                    targetRb = rb;
+					targetRb.useGravity = false;
                     targetRend = rb.gameObject.GetComponent<Renderer>();
                     targetCol = targetRend.material.color;
                     targetRend.material.color = Color.blue;
@@ -75,20 +76,20 @@ public class ForcePush : Equiptable
     private void MoveObject()
     {
         Vector3 lastFrame = GetSingularityPosition();
-        Vector3 offset = lastFrame - targetObject.position;
-        if (targetObject.velocity.magnitude > maxObjectVelocity)
+        Vector3 offset = lastFrame - targetRb.position;
+        if (targetRb.velocity.magnitude > maxObjectVelocity)
         {
-            targetObject.velocity = targetObject.velocity * dampFactor;
+            targetRb.velocity = targetRb.velocity * dampFactor;
         }
-        targetObject.AddForce(offset, ForceMode.Impulse);
+        targetRb.AddForce(offset, ForceMode.Impulse);
 
     }
     private void PushObjects()
     {
-        if (targetObject != null)
+        if (targetRb != null)
         {
-			targetObject.velocity = Vector3.zero;
-            targetObject.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
+			targetRb.velocity = Vector3.zero;
+            targetRb.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
             deductEnergy(pushEnergy);
             DropObject();
         }
@@ -99,10 +100,14 @@ public class ForcePush : Equiptable
         if (targetRend != null)
         {
             targetRend.material.color = targetCol;
-        }
-        targetRend = null;
+        }      
         targetCol = Color.white;
-        targetObject = null;
+		if (targetRb != null)
+		{
+			targetRb.useGravity = true;
+			targetRb = null;
+		}
+		targetRend = null;
     }
 
     void OnDisable()
