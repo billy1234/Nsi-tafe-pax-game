@@ -76,6 +76,13 @@ public class RangedAi : AiBase
 
     void turnToTarget()
 	{
+		if (target == null) 
+		{
+			turn = false;
+			return;
+		}
+		
+
 		Vector3 lookPos = target.position - transform.position;
 		lookPos.y = 0f;
 		Quaternion lookRoation = Quaternion.LookRotation (lookPos);

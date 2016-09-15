@@ -13,7 +13,7 @@ public class UiSlider
 
     public void update()
     {
-        slider.value = getValue();
+        //slider.value = getValue();
     }
     
    

@@ -1,57 +1,65 @@
 fileFormatVersion: 2
-guid: 9474d99e7d589e344b382deabb30ec70
-timeCreated: 1472608675
+guid: 7091b914008be2743a11609480912eff
+timeCreated: 1473903189
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Object
-    100004: Object002
-    100006: Object004
-    100008: Object010
-    100010: Object012
-    100012: Object016
-    100014: Object018
-    100016: Object019
-    100018: Object020
-    400000: //RootNode
-    400002: Object
-    400004: Object002
-    400006: Object004
-    400008: Object010
-    400010: Object012
-    400012: Object016
-    400014: Object018
-    400016: Object019
-    400018: Object020
-    2300000: Object
-    2300002: Object002
-    2300004: Object004
-    2300006: Object010
-    2300008: Object012
-    2300010: Object016
-    2300012: Object018
-    2300014: Object019
-    2300016: Object020
-    3300000: Object
-    3300002: Object002
-    3300004: Object004
-    3300006: Object010
-    3300008: Object012
-    3300010: Object016
-    3300012: Object018
-    3300014: Object019
-    3300016: Object020
-    4300000: Object
-    4300002: Object002
-    4300004: Object004
-    4300006: Object010
-    4300008: Object012
-    4300010: Object016
-    4300012: Object018
-    4300014: Object019
-    4300016: Object020
+    100000: Arm
+    100002: //RootNode
+    100004: Base
+    100006: Bicep
+    100008: Forearm
+    100010: Hand
+    100012: Handpart
+    100014: Handpart01
+    100016: Handpart02
+    100018: Handpart03
+    100020: Handpart04
+    100022: Index
+    100024: Index 2
+    100026: Index 3
+    100028: Middle
+    100030: Middle 2
+    100032: Middle 3
+    100034: Other 2
+    100036: Other 3
+    100038: Pinky
+    100040: Pinky 2
+    100042: Pinky 3
+    100044: That other finger
+    100046: Thumb
+    100048: Thumb 2
+    100050: Thumb 3
+    400000: Arm
+    400002: //RootNode
+    400004: Base
+    400006: Bicep
+    400008: Forearm
+    400010: Hand
+    400012: Handpart
+    400014: Handpart01
+    400016: Handpart02
+    400018: Handpart03
+    400020: Handpart04
+    400022: Index
+    400024: Index 2
+    400026: Index 3
+    400028: Middle
+    400030: Middle 2
+    400032: Middle 3
+    400034: Other 2
+    400036: Other 3
+    400038: Pinky
+    400040: Pinky 2
+    400042: Pinky 3
+    400044: That other finger
+    400046: Thumb
+    400048: Thumb 2
+    400050: Thumb 3
+    4300000: Arm
+    9500000: //RootNode
+    13700000: Arm
   materials:
     importMaterials: 1
     materialName: 0
@@ -110,7 +118,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

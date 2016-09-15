@@ -1,27 +1,18 @@
 fileFormatVersion: 2
-guid: d021f1ea33aa3a2479bfb68c407aff3b
-timeCreated: 1471492384
+guid: 775bde2b7c881ce49a980e4ed8266936
+timeCreated: 1473828423
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Bone004
-    100004: Cylinder002
-    100006: Elbow
-    100008: Top arm
-    100010: Wrist
     400000: //RootNode
-    400002: Bone004
-    400004: Cylinder002
-    400006: Elbow
-    400008: Top arm
-    400010: Wrist
-    4300000: Cylinder002
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: polySurface53
     9500000: //RootNode
-    13700000: Cylinder002
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:

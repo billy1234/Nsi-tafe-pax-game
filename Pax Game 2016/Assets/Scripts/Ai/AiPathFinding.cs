@@ -38,10 +38,8 @@ public class AiPathFinding : MonoBehaviour
     }
 
     public void walkTowardTarget()
-	{
-		
-			
-            myNavMeshAgent.SetDestination(aiBase.target.position);
+	{			
+          myNavMeshAgent.SetDestination(aiBase.target.position);
     }
 
 	public void kiteBack(Vector3 area,float duration)
