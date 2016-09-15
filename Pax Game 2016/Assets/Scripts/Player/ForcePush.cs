@@ -24,7 +24,7 @@ public class ForcePush : Equiptable
 	public Rigidbody targetRb;
     private Color targetCol;
     private Renderer targetRend;
-	public UnityEvent onCast,onHold,onDrop,onLaunch;
+	public UnityEvent onCast,onAquired,onHold,onDrop,onLaunch;
 
     public Vector3 GetSingularityPosition()
     {
@@ -70,7 +70,8 @@ public class ForcePush : Equiptable
             {
                 if (deductEnergy(Time.deltaTime * energyPerSec))
                 {
-                    DropObject();
+					DropObject();
+					onAquired.Invoke ();                   
                     targetRb = rb;
 					targetRb.useGravity = false;
                     targetRend = rb.gameObject.GetComponent<Renderer>();

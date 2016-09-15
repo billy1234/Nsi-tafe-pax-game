@@ -17,7 +17,9 @@ public class SingularityBomb : MonoBehaviour
 	public float duration = 10f;
 	public float explosionForce = 10f;
     public float imposionForce = 10f;
-    public float imporsionWait = 0.5f;
+    public float implosionWait = 0.5f;
+	public GameObject particleEffect;
+	public float soundFinishWait = 5f;
 	private bool active = false;
 	public UnityEvent onExplode,onImplode,onActivate;
 	private List<Rigidbody> affectedBodys;
@@ -83,7 +85,7 @@ public class SingularityBomb : MonoBehaviour
             affectedBodys[i].velocity = Vector3.zero;
             affectedBodys[i].AddForce((transform.position - affectedBodys[i].position).normalized * imposionForce, ForceMode.Force);
         }
-        yield return new WaitForSeconds(imporsionWait);
+        yield return new WaitForSeconds(implosionWait);
 		for(int i =0; i < affectedBodys.Count; i++)
 		{
 			affectedBodys [i].AddForce((affectedBodys[i].position - transform.position).normalized * explosionForce,ForceMode.Impulse);
@@ -92,7 +94,9 @@ public class SingularityBomb : MonoBehaviour
 		}
 		affectedBodys.Clear ();
 		onExplode.Invoke ();
-        gameObject.SetActive(false);
+		particleEffect.SetActive (false);
+		yield return new WaitForSeconds(soundFinishWait);
+		gameObject.SetActive (false);
     }
 
 	void swirlVortex(Vector3 position)
@@ -127,34 +131,4 @@ public class SingularityBomb : MonoBehaviour
 		return  (Quaternion.Euler(transform.up) * dirToCircle) * spinSpeed;
 	}
 
-	/*
-	 * void OnDrawGizmos()
-	{
-		
-		Gizmos.DrawWireSphere(transform.position,vortexRadius);
-	}
-	void drawDebugInfo()
-	{
-
-		for(int i =0; i < affectedBodys.Count; i++)
-		{
-			Vector3 debrisPos = affectedBodys [i].position;
-			Vector3 circlePoint = calculateCirclePoint (debrisPos,transform.position);
-			Vector3 moveToCircleVel = ( circlePoint - debrisPos) * vortextPushPullStrength;
-			Vector3 spinVel = pushAlongCircle(circlePoint,debrisPos,affectedBodys[i].transform.forward);
-			Vector3 forceDir =  moveToCircleVel + spinVel; // + spinVel;
-
-			Gizmos.color = Color.red;
-			Gizmos.DrawLine (debrisPos,debrisPos + moveToCircleVel);
-			Gizmos.color = Color.blue;
-			Gizmos.DrawSphere (circlePoint,0.1f);
-			Gizmos.color = Color.blue;
-			Gizmos.DrawLine (debrisPos,debrisPos + spinVel);
-			Gizmos.color = Color.green;
-			Gizmos.DrawLine (debrisPos,debrisPos + forceDir);
-	
-
-		}
-	}
-	*/
 }
