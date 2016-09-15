@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 
 public class ForcePush : Equiptable
@@ -19,10 +20,11 @@ public class ForcePush : Equiptable
     public LayerMask lifatbleObjects;
 
     public Transform cameraPos;
-    private Rigidbody targetRb;
+	[HideInInspector]
+	public Rigidbody targetRb;
     private Color targetCol;
     private Renderer targetRend;
-
+	public UnityEvent onCast,onHold,onDrop,onLaunch;
 
     public Vector3 GetSingularityPosition()
     {
@@ -32,11 +34,15 @@ public class ForcePush : Equiptable
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
-        {
-            if (targetRb == null)
-                GetObject();
-            else
-                PushObjects();
+        {			
+			if (targetRb == null) {
+				onCast.Invoke ();
+				GetObject ();
+			} 
+			else 
+			{
+				PushObjects ();
+			}
         }
     }
     private void FixedUpdate()
@@ -45,6 +51,7 @@ public class ForcePush : Equiptable
         {
             if (deductEnergy(Time.deltaTime * energyPerSec))
             {
+				onHold.Invoke();
                 MoveObject();
             }
             else
@@ -88,6 +95,7 @@ public class ForcePush : Equiptable
     {
         if (targetRb != null)
         {
+			onLaunch.Invoke ();
 			targetRb.velocity = Vector3.zero;
             targetRb.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
             deductEnergy(pushEnergy);
@@ -97,6 +105,7 @@ public class ForcePush : Equiptable
 
     void DropObject()
     {
+		onDrop.Invoke();
         if (targetRend != null)
         {
             targetRend.material.color = targetCol;
@@ -114,4 +123,5 @@ public class ForcePush : Equiptable
     {
         DropObject();
     }
+
 }
