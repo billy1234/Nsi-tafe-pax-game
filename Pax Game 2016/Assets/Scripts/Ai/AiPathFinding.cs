@@ -77,6 +77,10 @@ public class AiPathFinding : MonoBehaviour
 
 	public void activatePathfinding()
 	{
+        if (myNavMeshAgent.enabled == true)
+            return;
+
+
             myNavMeshAgent.enabled = true;
             myNavMeshAgent.Resume();
 	}

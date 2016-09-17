@@ -15,7 +15,6 @@ public class MeleAiBarge : AiBase
 	public int lungeChance = 5;
 	public float standUpVelocity =1f;
 
-	public UnityEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
     private void Start()
     {
         base.Start();

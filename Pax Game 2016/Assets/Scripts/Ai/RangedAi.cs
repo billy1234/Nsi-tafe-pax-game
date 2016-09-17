@@ -7,12 +7,10 @@ public class RangedAi : AiBase
 
 	private Color neutralColor;
 	private Renderer myRend;
-    public float turnSmoothing;
-    public float turnStateUpdateSpeed =0.05f;
-    public UnityEvent onFire;
-    private bool turn = true;
 
-	public UnityEvent OnWalk,OnRun,OnTurnLeft,OnTurnRight;
+    public float turnStateUpdateSpeed =0.05f;
+
+	
 
 	private void Start()
 	{
@@ -69,41 +67,15 @@ public class RangedAi : AiBase
         pathfinding.activatePathfinding();
         base.OnTargetInMin();
     }
-		
-
-
-
-
-    void turnToTarget()
-	{
-		if (target == null) 
-		{
-			turn = false;
-			return;
-		}
-		
-
-		Vector3 lookPos = target.position - transform.position;
-		lookPos.y = 0f;
-		Quaternion lookRoation = Quaternion.LookRotation (lookPos);
-        
-		transform.rotation =  Quaternion.Slerp(lookRoation, transform.rotation,Time.deltaTime * turnSmoothing);
-
-    }
+   
 
 	protected override void OnCustomState ()
 	{
 		pathfinding.deactivatePathfinding ();
-        onFire.Invoke();
+        OnAttack.Invoke();
 	}
 
-    void Update()
-    {
-        if (turn)
-        {
-            turnToTarget();
-        }
-    }
+  
 
 
 }

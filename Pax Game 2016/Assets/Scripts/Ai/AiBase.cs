@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -29,6 +30,11 @@ public abstract class AiBase : MonoBehaviour
 
     private readonly float unitTickRate = 0.1f;
 	protected AiPathFinding pathfinding;
+
+    protected bool turn = true;
+    public float turnSmoothing;
+
+    public UnityEvent OnWalk, OnRun, OnTurnLeft, OnTurnRight, OnAttack;
 
     #region initalization
     protected void Start ()
@@ -185,10 +191,37 @@ public abstract class AiBase : MonoBehaviour
         target = null;
     }
 
+
+
+    protected void turnToTarget()
+    {
+        if (target == null)
+        {
+            turn = false;
+            return;
+        }
+
+
+        Vector3 lookPos = target.position - transform.position;
+        lookPos.y = 0f;
+        Quaternion lookRoation = Quaternion.LookRotation(lookPos);
+
+        transform.rotation = Quaternion.Slerp(lookRoation, transform.rotation, Time.deltaTime * turnSmoothing);
+
+    }
+
+
+    void Update()
+    {
+        if (turn)
+        {
+            turnToTarget();
+        }
+    }
     #endregion
 
-	#region physicsEvents
-	void OnTriggerEnter(Collider col)
+    #region physicsEvents
+    void OnTriggerEnter(Collider col)
 	{
 		if (target == null && targetNewUnit(col.gameObject))
 		{
