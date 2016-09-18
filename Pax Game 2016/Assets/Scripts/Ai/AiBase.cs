@@ -158,6 +158,7 @@ public abstract class AiBase : MonoBehaviour
     }
 	protected virtual void OnTargetInRange()
     {
+        OnWalk.Invoke();       
         if (pathfinding != null)
         {
             pathfinding.walkTowardTarget();

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using System.Collections;
 
 
@@ -7,6 +8,7 @@ public class DamageOnCollide : WeaponBase
 {
     public bool deactivateWhenHit;
     protected Collider myCol;
+    public UnityEvent onDamage;
 
     void Start()
     {
@@ -19,11 +21,29 @@ public class DamageOnCollide : WeaponBase
         if (otherUnit != null)
         {
             damageUnit(otherUnit, damage);
-            
+            onDamage.Invoke();
             onHit();
+            
         }
-		onColide ();
+		onCollide();
        
+    }
+
+
+    public void toggleColldier(float duration)
+    {
+        StopAllCoroutines();
+        StartCoroutine(toggleColliderCoroutine(duration));      
+    }
+
+    private IEnumerator toggleColliderCoroutine(float duration)
+    {
+        myCol.enabled = true;
+        yield return new WaitForSeconds(duration);
+        if (myCol.enabled)
+        {
+            myCol.enabled = false;
+        }
     }
 
     protected virtual void onHit()
@@ -33,7 +53,7 @@ public class DamageOnCollide : WeaponBase
             myCol.enabled = false;
         }
     }
-	protected virtual void onColide()
+	protected virtual void onCollide()
 	{
 
 

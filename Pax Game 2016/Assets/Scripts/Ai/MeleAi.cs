@@ -8,7 +8,7 @@ public class MeleAi : AiBase
     private Renderer myRend;
     public CoolDown meleAttackCd;
     public int attackChance = 5;
-
+    public UnityEvent onAttackWait;
     private void Start()
     {
         base.Start();
@@ -56,8 +56,13 @@ public class MeleAi : AiBase
         turn = true;
         if (meleAttackCd.checkFire())
         {
+
             meleAttackCd.fire();
             OnAttack.Invoke();
+        }
+        else
+        {
+            onAttackWait.Invoke();
         }
     }
 
@@ -71,6 +76,10 @@ public class MeleAi : AiBase
         if (UnityEngine.Random.Range(0, attackChance) == attackChance - 1)
         {
             meleAttack();
+        }
+        else
+        {
+            onAttackWait.Invoke();
         }
     }
 

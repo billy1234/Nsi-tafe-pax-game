@@ -5,7 +5,7 @@ public class Bullet : DamageOnCollide
 {
 	public GameObject spawnOnDeath;
 	public Vector3 deathSpawnOffest;
-	protected override void onColide ()
+	protected override void onCollide ()
 	{
 
 		if (spawnOnDeath != null)
