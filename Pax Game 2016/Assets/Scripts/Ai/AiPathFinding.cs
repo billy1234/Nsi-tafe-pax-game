@@ -17,13 +17,16 @@ public class AiPathFinding : MonoBehaviour
     public float fleeSpeed =1f;
     public float nodeWidth = 3f;
 	private bool isKiting = false;
-	private Vector3 area;
+	private Vector3 fleeArea;
+    public bool setRotation { set { myNavMeshAgent.updateRotation = value; } }
     public void Awake()
     {
         aiBase = gameObject.GetComponent<AiBase>();
         myNavMeshAgent = GetComponent<NavMeshAgent>();
     }
 
+
+   
 
     public void patrol()
     {
@@ -47,7 +50,7 @@ public class AiPathFinding : MonoBehaviour
 		if (!isKiting) 
 		{
 			StopAllCoroutines ();
-			this.area = area;
+			this.fleeArea = area;
 			StartCoroutine (moveback ( duration));
 		}
     }
@@ -60,11 +63,11 @@ public class AiPathFinding : MonoBehaviour
 		isKiting = false;
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
 		if (isKiting) 
 		{
-			myNavMeshAgent.Move((transform.position - area).normalized * fleeSpeed * Time.fixedDeltaTime);
+			myNavMeshAgent.Move((transform.position - fleeArea).normalized * fleeSpeed * Time.deltaTime);
 		}
 	}
 		

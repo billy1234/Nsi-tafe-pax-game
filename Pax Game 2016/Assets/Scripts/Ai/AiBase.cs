@@ -19,7 +19,7 @@ public abstract class AiBase : MonoBehaviour
 
     protected aiState state = aiState.PATROL;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Transform target;
 
     [Tooltip("The max range this unit will atack from before getting closer")]
@@ -31,7 +31,19 @@ public abstract class AiBase : MonoBehaviour
     private readonly float unitTickRate = 0.1f;
 	protected AiPathFinding pathfinding;
 
-    protected bool turn = true;
+    protected bool turn
+    {
+        get { return _turn;  }
+        set
+        {
+            if (pathfinding != null)
+            {
+                pathfinding.setRotation = !value;
+            }
+            _turn = value;
+        }
+    }
+    private bool _turn;
     public float turnSmoothing;
 
     public UnityEvent OnWalk, OnRun, OnTurnLeft, OnTurnRight, OnAttack;
@@ -216,7 +228,8 @@ public abstract class AiBase : MonoBehaviour
     {
         if (turn)
         {
-            turnToTarget();
+           turnToTarget();
+          
         }
     }
     #endregion

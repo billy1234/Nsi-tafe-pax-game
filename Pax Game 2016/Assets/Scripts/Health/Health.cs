@@ -2,7 +2,6 @@
 using UnityEngine.Events;
 using System.Collections;
 
-public delegate void voidEvent();
 
 public class Health : MonoBehaviour
 {

@@ -19,6 +19,11 @@ public class CoolDown
 			return false;
 		}
 	}
+
+
+    /// <summary>
+    /// Will set the cooldown to now if the object is off cooldown
+    /// </summary>
 	public void fire()
 	{
 
@@ -28,9 +33,18 @@ public class CoolDown
 		}
 		else 
 		{
-			Debug.LogWarning ("not cooled down use check fire");
+			//Debug.LogWarning ("not cooled down use check fire");
 		}
 
 	}
-		
+
+
+    /// <summary>
+    /// Will set the cooldown to now even if the object is not off cooldown
+    /// </summary>
+    public void fireImmediate()
+    {
+        lastShot = Time.time;        
+    }
+
 }

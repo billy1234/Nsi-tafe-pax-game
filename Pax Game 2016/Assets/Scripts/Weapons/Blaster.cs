@@ -18,16 +18,53 @@ public class Blaster : Equiptable
     {
         GameObject g = spawner.Instantiate(bulletPrefabIndex, barrel.position, barrel.rotation) as GameObject;
         g.GetComponent<Rigidbody>().AddForce(barrel.forward * projectileSpeed, ForceMode.Force);
-        g.GetComponent<DamageOnCollide>().damage = damage;
+        g.GetComponent<WeaponBase>().damage = damage;
     }
 
     public void Fire()
     {
+        Fire(true);
+    }
+
+    public void Fire(bool setCd)
+    {
         if (cd.checkFire())
         {
-            cd.fire();
+            if (setCd)
+            {              
+                cd.fire();
+            }
+           
             launchBullet();
         }
     }
 
+    protected void FireIgnoreCd()
+    {
+        launchBullet();
+    }
+
+    public void FireDellay(float wait)
+    {
+        StartCoroutine(dellayFireCRoutine(wait,false));
+    }
+
+    public void FireDellayWithCd(float wait)
+    {
+        StartCoroutine(dellayFireCRoutine(wait,true));
+    }
+
+
+    IEnumerator dellayFireCRoutine(float wait,bool startCoolDown)
+    {
+        if (cd.checkFire())
+        {
+            if (startCoolDown)
+            {                
+                cd.fireImmediate();
+            }
+            yield return new WaitForSeconds(wait);
+            FireIgnoreCd();
+        }
+    }
 }

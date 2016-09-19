@@ -44,7 +44,7 @@ public class CharacterMovement : MonoBehaviour
         float hInput = Input.GetAxisRaw("Horizontal");
         float vInput = Input.GetAxisRaw("Vertical");
 
-        moveDirection = new Vector3(hInput, 0, vInput);
+        moveDirection = new Vector3(hInput, 0f, vInput);
         moveDirection = transform.TransformDirection(moveDirection);
         moveDirection *= movementSpeed;
 
@@ -53,16 +53,17 @@ public class CharacterMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 rigid.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-				if (rigid.velocity.magnitude > maxVelocity) 
-				{
-					rigid.velocity = rigid.velocity.normalized * maxVelocity;
-				}
+				
                 isGrounded = false;
                 isJumping = true;
             }
         }
 
 		rigid.AddForce(moveDirection * Time.fixedDeltaTime * movementSpeed,ForceMode.VelocityChange);
+        if (rigid.velocity.magnitude > maxVelocity)
+        {
+            rigid.velocity = rigid.velocity.normalized * maxVelocity;
+        }
     }
     private void HandleRotation()
     {

@@ -83,13 +83,16 @@ public class ForcePush : Equiptable
     }
     private void MoveObject()
     {
-        Vector3 lastFrame = GetSingularityPosition();
-        Vector3 offset = lastFrame - targetRb.position;
+        Vector3 singularityPos = GetSingularityPosition();
+        Vector3 offset = singularityPos - targetRb.position;
         if (targetRb.velocity.magnitude > maxObjectVelocity)
         {
             targetRb.velocity = targetRb.velocity * dampFactor;
         }
-        targetRb.AddForce(offset, ForceMode.Impulse);
+        //targetRb.MovePosition(targetRb.position + offset / 5f);
+        targetRb.AddForce(offset,ForceMode.VelocityChange);
+        
+       
 
     }
     private void PushObjects()

@@ -17,9 +17,9 @@ public class EntitySpawner : MonoBehaviour
 		public string name;
 		public GameObject prefab;
 		public int initalAmount = 100;
-		[HideInInspector]
+		//[HideInInspector]
 		public List<GameObject> activeObjects;
-		[HideInInspector]
+		//[HideInInspector]
 		public List<GameObject> inactiveObjects;
 
 	}
@@ -108,6 +108,7 @@ public class EntitySpawner : MonoBehaviour
 		for (int i = 0; i < spawnables.Length; i++)
 		{
 			spawnables [i].inactiveObjects = new List<GameObject>(spawnables[i].initalAmount);
+            spawnables[i].prefab.SetActive(false);
 			for(int x=0; x < spawnables[i].initalAmount; x++)
 			{				
 				instanciateSpawnable (i);

@@ -8,7 +8,6 @@ public class RangedAi : AiBase
 	private Color neutralColor;
 	private Renderer myRend;
 
-    public float turnStateUpdateSpeed =0.05f;
 
 	
 
@@ -64,8 +63,10 @@ public class RangedAi : AiBase
 
     protected override void OnTargetInMin()
     {
+        
         pathfinding.activatePathfinding();
         base.OnTargetInMin();
+        OnAttack.Invoke(); //still will shoot in min range
     }
    
 

@@ -17,18 +17,17 @@ public class VelocityProjectile : DamageOnCollide
     Rigidbody myRb;
     public float maxDamagevelocity = 5;
     public bool destroyOnDamage = true;
-	public bool playerImmune = true;
+	
+
     void Awake()
     {
         myRb = GetComponent<Rigidbody>();
     }
+
     protected override void damageUnit(Health unit, int damage)
     {
 		
-		if (playerImmune && unit.gameObject.GetComponent<CharacterMovement> () != null)
-		{
-			return;
-		}
+		
 
         damage = Mathf.Clamp( Mathf.RoundToInt(myRb.velocity.magnitude / maxDamagevelocity  * myRb.mass) * damage, 0,damage);
 		if (myRb.velocity.magnitude == 0)
@@ -37,7 +36,11 @@ public class VelocityProjectile : DamageOnCollide
 		}
 
         base.damageUnit(unit, damage);
-        
+        ShatterOnDeath s =  unit.gameObject.GetComponent<ShatterOnDeath>();
+        if(s != null)
+        {
+            s.rb = myRb;
+        }
     }
 
     protected override void onHit()
