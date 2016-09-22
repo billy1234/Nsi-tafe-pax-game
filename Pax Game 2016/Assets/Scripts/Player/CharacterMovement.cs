@@ -15,6 +15,7 @@ public class CharacterMovement : MonoBehaviour
 	public float maxCameraRotation = 90, minCameraRotation =  -90;
     // Movement
     private Vector3 moveDirection;
+    private Vector3 rbVel;
     private Rigidbody rigid;
     // Jumping
     private bool isGrounded = true;
@@ -62,15 +63,16 @@ public class CharacterMovement : MonoBehaviour
 		rigid.AddForce(moveDirection * Time.fixedDeltaTime * movementSpeed,ForceMode.VelocityChange);
         if (rigid.velocity.magnitude > maxVelocity)
         {
-            rigid.velocity = rigid.velocity.normalized * maxVelocity;
+            rbVel = rigid.velocity.normalized * maxVelocity;
+            rbVel.y = rigid.velocity.y;
+            rigid.velocity = rbVel;
         }
     }
     private void HandleRotation()
     {
 		if(Input.GetAxis("Mouse X") == 0 && Input.GetAxis("Mouse Y") == 0)
-		{
 			return;
-		}
+
 		yaw 	+= Input.GetAxis("Mouse X") * mouseSensitivity;
 		pitch 	+= -Input.GetAxis("Mouse Y") * mouseSensitivity;
 		pitch 	= Mathf.Clamp (pitch ,minCameraRotation,maxCameraRotation)				;

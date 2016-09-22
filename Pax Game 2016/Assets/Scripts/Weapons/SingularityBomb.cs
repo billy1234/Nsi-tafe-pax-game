@@ -16,6 +16,7 @@ public class SingularityBomb : MonoBehaviour
 	public float maxDebrisVelocity = 10f;
 	public float duration = 10f;
 	public float explosionForce = 10f;
+    public float explosionYForce = 1f;
     public float imposionForce = 10f;
     public float implosionWait = 0.5f;
 	public GameObject particleEffect;
@@ -88,7 +89,12 @@ public class SingularityBomb : MonoBehaviour
         yield return new WaitForSeconds(implosionWait);
 		for(int i =0; i < affectedBodys.Count; i++)
 		{
-			affectedBodys [i].AddForce((affectedBodys[i].position - transform.position).normalized * explosionForce,ForceMode.Impulse);
+            affectedBodys[i].velocity = Vector3.zero;
+            Vector3 forceDir = ( //affectedBodys[i].position - transform.position
+                Random.onUnitSphere).normalized * explosionForce;
+            forceDir.y = explosionYForce;
+            affectedBodys[i].AddForce(forceDir, ForceMode.Impulse);
+            affectedBodys[i].velocity = forceDir;
 			affectedBodys [i].useGravity = true;
 
 		}

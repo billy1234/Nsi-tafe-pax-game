@@ -7,7 +7,6 @@ public class ShatterOnDeath : MonoBehaviour
 {
     public GameObject brokenMesh;
     public GameObject mainMesh;
-    public UnityEvent onDeath;
     private Health myHp;
     public float forceExagerationFactor = 50f;
 
@@ -34,6 +33,11 @@ public class ShatterOnDeath : MonoBehaviour
                 r.AddTorque(Random.onUnitSphere);
             }
         }
-        onDeath.Invoke();
+        Collider[] cols = GetComponents<Collider>();
+
+        foreach (Collider c in cols)
+        {
+            c.enabled = false;
+        }
     }
 }

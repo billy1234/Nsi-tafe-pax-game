@@ -90,6 +90,7 @@ public class EntitySpawner : MonoBehaviour
 	{
 		spawnables [index].inactiveObjects.Add (g);
 		spawnables [index].activeObjects.Remove (g);
+        
 		StartCoroutine (parentNextFrame (g, transform));
 	}
 

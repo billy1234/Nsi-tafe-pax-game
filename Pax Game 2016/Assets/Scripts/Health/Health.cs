@@ -21,6 +21,7 @@ public class Health : MonoBehaviour
                     }
 
     private int _hp;
+    private bool alive = true;
 
     /// <summary>
     /// If you have a behavior you wish to trigger += it to these events
@@ -36,7 +37,9 @@ public class Health : MonoBehaviour
 
     private void changeHp(int newHp)
     {
-        
+        if (!alive)
+            return;
+
         if (newHp > _hp)
         {
             OnHeal.Invoke();
@@ -57,6 +60,7 @@ public class Health : MonoBehaviour
         if (_hp <= 0)
         {
             OnDie.Invoke();
+            alive = false;
             _hp = 0;
         }
     }
