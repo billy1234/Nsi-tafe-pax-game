@@ -7,7 +7,7 @@ using UnityEditor;
 
 public enum aiState
 {
-    PATROL, ATTACK, TARGET_IN_MIN, CUSTOM_STATE
+    PATROL, ATTACK, TARGET_IN_MIN, CUSTOM_STATE,STUNNED
 };
 
 
@@ -91,6 +91,30 @@ public abstract class AiBase : MonoBehaviour
     #endregion
 
     #region gameplayEvents
+	public Rigidbody setStun(bool stunState)
+	{
+		Rigidbody r = GetComponent<Rigidbody>();
+		if (stunState)
+		{
+			if (pathfinding != null)
+			{
+				pathfinding.deactivatePathfinding();
+			}
+			state = aiState.STUNNED;
+			r.isKinematic = false;
+		} 
+		else
+		{
+			if (pathfinding != null)
+			{
+				pathfinding.activatePathfinding();
+			}
+			state = aiState.PATROL;
+			r.isKinematic = true;
+		}
+		return GetComponent<Rigidbody>();
+	}
+
 
     /// <summary>
     /// as well as the colision events causing evets to trigger this function will be called every x seconds to 
@@ -108,6 +132,11 @@ public abstract class AiBase : MonoBehaviour
             {
                 OnTargetDisabled();
             }
+			if (state == aiState.STUNNED) 
+			{
+				yield return new WaitForSeconds(unitTickRate);
+				continue;
+			}
 
 
             if (state == aiState.CUSTOM_STATE)
@@ -237,6 +266,9 @@ public abstract class AiBase : MonoBehaviour
     #region physicsEvents
     void OnTriggerEnter(Collider col)
 	{
+		if (state == aiState.STUNNED)
+			return;
+		
 		if (target == null && targetNewUnit(col.gameObject))
 		{
 			target = col.transform;
@@ -245,6 +277,9 @@ public abstract class AiBase : MonoBehaviour
 	}
 	void OnTriggerExit(Collider col)
 	{
+		if (state == aiState.STUNNED)
+			return;
+		
 		if (col.transform == target)
 		{            
 			

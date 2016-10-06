@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class SingularityBomb : MonoBehaviour 
 {
 	public LayerMask affectedRbLayer;
+	public LayerMask explosionDamageLayer;
 	public float size = 1f; //of the explosion
 	public float minVortexSize =1f;
 	public float maxVortexSize = 5f;
@@ -19,11 +20,14 @@ public class SingularityBomb : MonoBehaviour
     public float explosionYForce = 1f;
     public float imposionForce = 10f;
     public float implosionWait = 0.5f;
+	public float explosionDamageRadius = 3f;
+	public int explosionDamage = 100;
 	public GameObject particleEffect;
 	public float soundFinishWait = 5f;
 	private bool active = false;
 	public UnityEvent onExplode,onImplode,onActivate;
 	private List<Rigidbody> affectedBodys;
+	//private List<AiPathFinding> affectedEnemys;
 
 	Vector3 debrisPos;
 	Vector3 circlePoint;
@@ -61,9 +65,15 @@ public class SingularityBomb : MonoBehaviour
 		foreach (Collider col in hitCols) 
 		{
 			Rigidbody r = col.GetComponent<Rigidbody> ();
-			if (r != null) 
+			if (r != null && !r.isKinematic) 
 			{
 				affectedBodys.Add (r);	
+				r.useGravity = false;
+			}
+			AiBase ai = col.GetComponent<AiBase> ();
+			if (ai != null)
+			{
+				affectedBodys.Add (ai.setStun (true));
 				r.useGravity = false;
 			}
 		}
@@ -87,6 +97,10 @@ public class SingularityBomb : MonoBehaviour
             affectedBodys[i].AddForce((transform.position - affectedBodys[i].position).normalized * imposionForce, ForceMode.Force);
         }
         yield return new WaitForSeconds(implosionWait);
+		damageEnemys ();
+		yield return new WaitForSeconds(Time.fixedDeltaTime);
+		affectedBodys.Clear ();
+		aquireRbs ();
 		for(int i =0; i < affectedBodys.Count; i++)
 		{
             affectedBodys[i].velocity = Vector3.zero;
@@ -95,7 +109,7 @@ public class SingularityBomb : MonoBehaviour
             forceDir.y = explosionYForce;
             affectedBodys[i].AddForce(forceDir, ForceMode.Impulse);
             affectedBodys[i].velocity = forceDir;
-			affectedBodys [i].useGravity = true;
+			affectedBodys[i].useGravity = true;
 
 		}
 		affectedBodys.Clear ();
@@ -124,6 +138,20 @@ public class SingularityBomb : MonoBehaviour
 
 		}
 
+	}
+
+	private void damageEnemys()
+	{
+		Collider[] nearbodys = Physics.OverlapSphere(transform.position,explosionDamageRadius,explosionDamageLayer);
+		Health enemyHp;
+		for (int i = 0; i < nearbodys.Length; i++) 
+		{
+			enemyHp = nearbodys[i].GetComponent<Health>();
+			if (enemyHp != null) 
+			{
+				enemyHp.hp -= explosionDamage;
+			}
+		}
 	}
 
 

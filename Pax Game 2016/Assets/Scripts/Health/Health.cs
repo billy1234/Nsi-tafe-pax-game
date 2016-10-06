@@ -6,6 +6,10 @@ using System.Collections;
 public class Health : MonoBehaviour
 {
     public UnityEvent OnDie, OnTakeDamage, OnHeal;
+    public float normalizedHp()
+    {
+        return (float)_hp / (float)MaxHp;
+    }
     #region variables
     /// <summary>
     /// Max health this unit can hold

@@ -6,6 +6,8 @@ public class EquipableSwitcher : MonoBehaviour
 	public equiptableInfo telekenisis;
 	public equiptableInfo blaster;
 
+	private WeaponIndicator weaponIndicator;
+
 	[System.Serializable]
 	public struct equiptableInfo
 	{
@@ -14,7 +16,15 @@ public class EquipableSwitcher : MonoBehaviour
 		public Equiptable equiptable;
 	}
 
-	
+	void Awake()
+	{
+		weaponIndicator = GetComponent<WeaponIndicator>();
+		//equipt the starting weapon
+		deEquipAll();
+		telekenisis.equiptable.equip();
+		if (weaponIndicator != null)
+			weaponIndicator.displayWeapon (weaponType.TELEKENISIS);
+	}
 
 	void Update ()
 	{
@@ -22,11 +32,15 @@ public class EquipableSwitcher : MonoBehaviour
 		{
 			deEquipAll();
 			telekenisis.equiptable.equip();
+			if (weaponIndicator != null)
+				weaponIndicator.displayWeapon (weaponType.TELEKENISIS);
 		}
 		else if(!blaster.locked && Input.GetKeyDown(blaster.equiptKey))
 		{
 			deEquipAll();
 			blaster.equiptable.equip();
+			if (weaponIndicator != null)
+				weaponIndicator.displayWeapon (weaponType.SINGULARITY);
 		}
 	}
 	private void deEquipAll()
@@ -34,4 +48,6 @@ public class EquipableSwitcher : MonoBehaviour
 		telekenisis.equiptable.deEquip();
 		blaster.equiptable.deEquip();
 	}
+
+
 }
