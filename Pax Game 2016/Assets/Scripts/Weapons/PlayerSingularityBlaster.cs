@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerBlaster : Blaster {
+public class PlayerSingularityBlaster : Blaster {
      
     public KeyCode shoot;
 
@@ -11,7 +11,7 @@ public class PlayerBlaster : Blaster {
         {
             if (cd.checkFire())
             {
-                if (deductAmmo(ref resources.blasterAmmo))
+				if (deductAmmo(ref resources.singularityAmmo))
                 {
                     cd.fire();
                     launchBullet();

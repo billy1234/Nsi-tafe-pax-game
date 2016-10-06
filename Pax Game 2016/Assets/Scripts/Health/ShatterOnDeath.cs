@@ -25,6 +25,8 @@ public class ShatterOnDeath : MonoBehaviour
     {
         mainMesh.SetActive(false);
         brokenMesh.SetActive(true);
+		brokenMesh.transform.parent = null;
+		gameObject.SetActive (false);
         if (rb != null)
         {
             foreach (Rigidbody r in brokenMesh.GetComponentsInChildren<Rigidbody>())
@@ -33,9 +35,9 @@ public class ShatterOnDeath : MonoBehaviour
                 r.AddTorque(Random.onUnitSphere);
             }
         }
-        Collider[] cols = GetComponents<Collider>();
+		Collider[] colliders = GetComponents<Collider>();
 
-        foreach (Collider c in cols)
+		foreach (Collider c in colliders)
         {
             c.enabled = false;
         }

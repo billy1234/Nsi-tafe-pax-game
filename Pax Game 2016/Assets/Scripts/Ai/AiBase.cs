@@ -254,13 +254,22 @@ public abstract class AiBase : MonoBehaviour
 
 
     void Update()
-    {
-        if (turn)
-        {
-           turnToTarget();
+	{
+		if (turn && enabled) {
+			turnToTarget ();
           
-        }
-    }
+		}
+	}
+
+	void OnDisable()
+	{
+		StopAllCoroutines ();
+		Rigidbody rb = GetComponent<Rigidbody> ();
+		if (rb != null)
+		{
+			rb.isKinematic = true;
+		}
+	}
     #endregion
 
     #region physicsEvents

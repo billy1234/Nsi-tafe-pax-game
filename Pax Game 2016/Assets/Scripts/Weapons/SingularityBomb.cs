@@ -42,13 +42,12 @@ public class SingularityBomb : MonoBehaviour
 		onActivate.Invoke ();
 		yield return new WaitForSeconds (duration);
 		active = false;
-		StartCoroutine(explode ());
-		
+		StartCoroutine(explode ());		
 
 	}
 	void OnEnable () 
 	{	
-
+		affectedBodys = new List<Rigidbody>();
 		Play();
 	}
 
@@ -60,7 +59,7 @@ public class SingularityBomb : MonoBehaviour
 
 	void aquireRbs()
 	{
-		affectedBodys = new List<Rigidbody>();
+		
 		Collider[] hitCols = Physics.OverlapSphere(transform.position,size,affectedRbLayer.value);
 		foreach (Collider col in hitCols) 
 		{
@@ -73,8 +72,13 @@ public class SingularityBomb : MonoBehaviour
 			AiBase ai = col.GetComponent<AiBase> ();
 			if (ai != null)
 			{
-				affectedBodys.Add (ai.setStun (true));
-				r.useGravity = false;
+				if ((transform.position - ai.transform.position).magnitude < size)
+				{					
+
+					r = ai.setStun (true);
+					affectedBodys.Add (r);
+					r.useGravity = false;
+				}
 			}
 		}
 	}
@@ -85,6 +89,7 @@ public class SingularityBomb : MonoBehaviour
 		if (active)
 		{
 			swirlVortex (transform.position);
+
 		}
 	}
 
@@ -98,18 +103,24 @@ public class SingularityBomb : MonoBehaviour
         }
         yield return new WaitForSeconds(implosionWait);
 		damageEnemys ();
-		yield return new WaitForSeconds(Time.fixedDeltaTime);
-		affectedBodys.Clear ();
+		yield return new WaitForSeconds (Time.fixedDeltaTime);
 		aquireRbs ();
+
+		Health h;
 		for(int i =0; i < affectedBodys.Count; i++)
 		{
             affectedBodys[i].velocity = Vector3.zero;
-            Vector3 forceDir = ( //affectedBodys[i].position - transform.position
-                Random.onUnitSphere).normalized * explosionForce;
+            Vector3 forceDir = ( Random.onUnitSphere).normalized * explosionForce;
             forceDir.y = explosionYForce;
             affectedBodys[i].AddForce(forceDir, ForceMode.Impulse);
             affectedBodys[i].velocity = forceDir;
 			affectedBodys[i].useGravity = true;
+			h = affectedBodys [i].GetComponent<Health> ();
+			if(h != null)
+			{
+				h.hp = 0;
+			}
+
 
 		}
 		affectedBodys.Clear ();

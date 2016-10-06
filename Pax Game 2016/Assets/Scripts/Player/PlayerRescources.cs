@@ -4,7 +4,6 @@ public class PlayerRescources : MonoBehaviour
 {
     public UiSlider energySlider;
     public Energy energy;
-    public Ammo blasterAmmo;
     public Ammo singularityAmmo;
 
     void Awake()
@@ -19,7 +18,7 @@ public class PlayerRescources : MonoBehaviour
 
     void Start()
     {
-        blasterAmmo.initalize();
+        singularityAmmo.initalize();
     }
 
     void Update()

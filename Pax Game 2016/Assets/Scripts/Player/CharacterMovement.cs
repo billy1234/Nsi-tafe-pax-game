@@ -29,7 +29,7 @@ public class CharacterMovement : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         mainCamera = GameObject.FindObjectOfType<Camera>().transform;
-        LockCursor(true);
+        //LockCursor(true);
     }
     private void FixedUpdate()
     {

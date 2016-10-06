@@ -4,7 +4,7 @@ using System.Collections;
 public class EquipableSwitcher : MonoBehaviour
 {
 	public equiptableInfo telekenisis;
-	public equiptableInfo blaster;
+	public equiptableInfo singularityBlaster;
 
 	private WeaponIndicator weaponIndicator;
 
@@ -35,10 +35,10 @@ public class EquipableSwitcher : MonoBehaviour
 			if (weaponIndicator != null)
 				weaponIndicator.displayWeapon (weaponType.TELEKENISIS);
 		}
-		else if(!blaster.locked && Input.GetKeyDown(blaster.equiptKey))
+		else if(!singularityBlaster.locked && Input.GetKeyDown(singularityBlaster.equiptKey))
 		{
 			deEquipAll();
-			blaster.equiptable.equip();
+			singularityBlaster.equiptable.equip();
 			if (weaponIndicator != null)
 				weaponIndicator.displayWeapon (weaponType.SINGULARITY);
 		}
@@ -46,7 +46,7 @@ public class EquipableSwitcher : MonoBehaviour
 	private void deEquipAll()
 	{
 		telekenisis.equiptable.deEquip();
-		blaster.equiptable.deEquip();
+		singularityBlaster.equiptable.deEquip();
 	}
 
 

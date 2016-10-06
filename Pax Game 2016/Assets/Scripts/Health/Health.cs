@@ -8,6 +8,10 @@ public class Health : MonoBehaviour
     public UnityEvent OnDie, OnTakeDamage, OnHeal;
     public float normalizedHp()
     {
+		if (_hp == 0)
+		{
+			return 0;
+		}
         return (float)_hp / (float)MaxHp;
     }
     #region variables
@@ -41,32 +45,42 @@ public class Health : MonoBehaviour
 
     private void changeHp(int newHp)
     {
+		int originalHp = _hp;
         if (!alive)
             return;
+		//modify hp
+		_hp = newHp;
 
-        if (newHp > _hp)
+		if (_hp > MaxHp)
+		{
+
+			_hp = MaxHp;
+		}
+		if (_hp <= 0)
+		{
+			
+			alive = false;
+			_hp = 0;
+		}
+
+		if (!alive)
+		{
+			OnDie.Invoke();
+		}
+
+		//play hp events
+		if (newHp > originalHp)
         {
             OnHeal.Invoke();
         }
-        else if(newHp < _hp)
+		else if(newHp < originalHp)
         {
             OnTakeDamage.Invoke();
         }
 
-        _hp = newHp;
+       
 
-        if (_hp > MaxHp)
-        {
-
-            _hp = MaxHp;
-        }
-
-        if (_hp <= 0)
-        {
-            OnDie.Invoke();
-            alive = false;
-            _hp = 0;
-        }
+       
     }
 
   

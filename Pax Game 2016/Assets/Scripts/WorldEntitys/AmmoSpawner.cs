@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class AmmoSpawner : MonoBehaviour
 {
     public int ammoPrefab;
-    public CoolDown refresh;
+    //public CoolDown refresh;
     public List<SingularityPickup> inactivePickups;
 
     void Awake()

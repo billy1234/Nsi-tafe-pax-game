@@ -90,7 +90,7 @@ public class AiPathFinding : MonoBehaviour
 
 	void OnDisable()
 	{
-		StopAllCoroutines ();
+		StopAllCoroutines();
 	}
 	
 }
