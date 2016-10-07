@@ -63,9 +63,8 @@ public class CharacterMovement : MonoBehaviour
 		rigid.AddForce(moveDirection * Time.fixedDeltaTime * movementSpeed,ForceMode.VelocityChange);
         if (rigid.velocity.magnitude > maxVelocity)
         {
-            rbVel = rigid.velocity.normalized * maxVelocity;
-            rbVel.y = rigid.velocity.y;
-            rigid.velocity = rbVel;
+            clampVelocity();
+            
         }
     }
     private void HandleRotation()
@@ -133,5 +132,36 @@ public class CharacterMovement : MonoBehaviour
                 isGrounded = false;
             }
         }
+    }
+
+    private void clampVelocity()
+    {
+        float x = rigid.velocity.x;
+        float z = rigid.velocity.z;
+        if (Mathf.Abs(x) > maxVelocity)
+        {
+            x = normalizeFloat(x) * maxVelocity;
+        }
+        if (Mathf.Abs(z) > maxVelocity)
+        {
+            z = normalizeFloat(z) * maxVelocity;
+        }
+        rbVel = new Vector3(x,rigid.velocity.y,z);
+        rigid.velocity = rbVel;
+    }
+
+    private float normalizeFloat(float i)
+    {
+        if (i > 0)
+        {
+            i = 1;
+
+        }
+        if (i < 0)
+        {
+            i = -1;
+
+        }
+        return i;
     }
 }

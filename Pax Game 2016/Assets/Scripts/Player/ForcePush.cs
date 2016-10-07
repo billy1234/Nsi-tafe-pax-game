@@ -13,7 +13,8 @@ public class ForcePush : Equiptable
     [Range(0f, 1f)]
     public float dampFactor = 0.9f;
     public float maxObjectVelocity = 1f;
-    [Header("Singularity")]
+    public float minOffset = 0.1f;
+    [Header("Aqusition")]
     public float singularityDistance = 5f;
     public float singularityRadius = 1f;
 	public float sphereCastWidth =1f;
@@ -85,6 +86,14 @@ public class ForcePush : Equiptable
     {
         Vector3 singularityPos = GetSingularityPosition();
         Vector3 offset = singularityPos - targetRb.position;
+
+        if (offset.magnitude < minOffset)
+        {
+            targetRb.velocity *= dampFactor;
+            targetRb.AddTorque(Random.onUnitSphere);
+            return;
+        }
+
         if (targetRb.velocity.magnitude > maxObjectVelocity)
         {
             targetRb.velocity = targetRb.velocity * dampFactor;
