@@ -12,7 +12,7 @@ public class ShatterOnDeath : MonoBehaviour
 
     [HideInInspector]
     public Rigidbody rb; //if an rb happend to trigger death we can refrence it here to add force based on it
-    
+    public Vector3 rbVelocity;
 
 
 	void Awake()
@@ -31,9 +31,10 @@ public class ShatterOnDeath : MonoBehaviour
         {
             foreach (Rigidbody r in brokenMesh.GetComponentsInChildren<Rigidbody>())
             {
-                r.AddForceAtPosition(rb.velocity * forceExagerationFactor, rb.position);
-                r.AddTorque(Random.onUnitSphere);
+                r.AddForceAtPosition(rbVelocity * forceExagerationFactor, rb.position,ForceMode.Impulse);
+                r.AddTorque(Random.onUnitSphere);               
             }
+            rb.velocity = rbVelocity;
         }
 		Collider[] colliders = GetComponents<Collider>();
 

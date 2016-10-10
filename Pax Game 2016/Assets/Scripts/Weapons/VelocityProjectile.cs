@@ -18,11 +18,16 @@ public class VelocityProjectile : DamageOnCollide
     Rigidbody myRb;
     public float maxDamagevelocity = 5;
     public bool destroyOnDamage = true;
-	
-
+    private bool isTrackingVelocity = false;
+    private Vector3 velLastFrame;
     void Awake()
     {
         myRb = GetComponent<Rigidbody>();
+    }
+    protected override void OnCollisionEnter(Collision col)
+    {
+        base.OnCollisionEnter(col);
+        isTrackingVelocity = false;
     }
 
     protected override void damageUnit(Health unit, int damage)
@@ -41,6 +46,7 @@ public class VelocityProjectile : DamageOnCollide
         if(s != null)
         {
             s.rb = myRb;
+            s.rbVelocity = velLastFrame;
         }
     }
 
@@ -57,5 +63,18 @@ public class VelocityProjectile : DamageOnCollide
         maxDamagevelocity = info.maxDamagevelocity;
         damage = info.damage;
         destroyOnDamage = info.destroyOnDamage;
+    }
+
+    public void trackVelocity()
+    {
+        isTrackingVelocity = true;
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isTrackingVelocity)
+            return;
+        velLastFrame = myRb.velocity;
+        
     }
 }

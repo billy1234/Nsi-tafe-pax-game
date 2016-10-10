@@ -17,7 +17,7 @@ public class Blaster : Equiptable
     protected void launchBullet()
     {
         GameObject g = spawner.Instantiate(bulletPrefabIndex, barrel.position, barrel.rotation) as GameObject;
-        g.GetComponent<Rigidbody>().AddForce(barrel.forward * projectileSpeed, ForceMode.Force);
+        g.GetComponent<Rigidbody>().AddForce(barrel.forward * projectileSpeed, ForceMode.Impulse);
         g.GetComponent<WeaponBase>().damage = damage;
     }
 

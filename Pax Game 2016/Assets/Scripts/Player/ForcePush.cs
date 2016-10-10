@@ -7,17 +7,22 @@ public class ForcePush : Equiptable
     #region Variables
     [Header("Force")]
     public float forceStr = 150f;
-    public float energyPerSec = 0.05f;
-    public float pushEnergy = 0.2f;
-    [Header("Object Movement")]
+    public float maxObjectVelocity = 1f;  
     [Range(0f, 1f)]
-    public float dampFactor = 0.9f;
-    public float maxObjectVelocity = 1f;
-    public float minOffset = 0.1f;
-    [Header("Aqusition")]
-    public float singularityDistance = 5f;
+    public float dampFactor = 0.9f;    
+    public float nearSpinThreshold = 0.1f;
+    [Header("Aqusition")]   
     public float singularityRadius = 1f;
 	public float sphereCastWidth =1f;
+    [Header("SinguarityContraints")]
+    public float singularityDistance = 5f;
+    public float minSingularity = 3f;
+    public float maxSingularity = 7f;
+    public float singularityScrollSensitivity = 3f;
+    [Header("Energy")]
+    public float energyPerSec = 0.05f;
+    public float pushEnergy = 0.2f;
+    [Space(10)]
     public LayerMask lifatbleObjects;
 
     public Transform cameraPos;
@@ -44,6 +49,12 @@ public class ForcePush : Equiptable
 			{
 				PushObjects ();
 			}
+        }
+        if (Input.GetAxisRaw("Mouse ScrollWheel") != 0)
+        {
+            singularityDistance += Input.GetAxisRaw("Mouse ScrollWheel") * singularityScrollSensitivity; 
+            singularityDistance = Mathf.Clamp(singularityDistance, minSingularity, maxSingularity);
+
         }
     }
     private void FixedUpdate()
@@ -87,7 +98,7 @@ public class ForcePush : Equiptable
         Vector3 singularityPos = GetSingularityPosition();
         Vector3 offset = singularityPos - targetRb.position;
 
-        if (offset.magnitude < minOffset)
+        if (offset.magnitude < nearSpinThreshold)
         {
             targetRb.velocity *= dampFactor;
             targetRb.AddTorque(Random.onUnitSphere);
@@ -111,7 +122,12 @@ public class ForcePush : Equiptable
 			onLaunch.Invoke ();
 			targetRb.velocity = Vector3.zero;
             targetRb.AddForce(cameraPos.forward * forceStr, ForceMode.Impulse);
-            deductEnergy(pushEnergy);
+            deductEnergy(pushEnergy);           
+            VelocityProjectile v = targetRb.GetComponent<VelocityProjectile>();
+            if (v != null)
+            {
+                v.trackVelocity();
+            }
             DropObject();
         }
     }

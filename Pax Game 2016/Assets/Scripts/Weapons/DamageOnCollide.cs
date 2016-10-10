@@ -16,7 +16,7 @@ public class DamageOnCollide : WeaponBase
         myCol = GetComponent<Collider>();
     }
 
-    void OnCollisionEnter(Collision col)
+    protected virtual void OnCollisionEnter(Collision col)
     {
 		
         Health otherUnit = col.gameObject.GetComponent<Health>();
@@ -60,15 +60,13 @@ public class DamageOnCollide : WeaponBase
 	{
 		
 		if (knockBackForce <= 0)
-		{
 			return;
-		}
+
 		Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
 
 		if (rb == null)
-		{
 			return;
-		}
+
 		Vector3 forceDir = (other.gameObject.transform.position - transform.position);
 		forceDir.y = 0;
 		rb.AddForce (forceDir.normalized * knockBackForce,ForceMode.Impulse);

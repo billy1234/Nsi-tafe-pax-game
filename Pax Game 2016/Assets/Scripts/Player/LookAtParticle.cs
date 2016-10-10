@@ -6,6 +6,7 @@ public class LookAtParticle : MonoBehaviour
 	public ForcePush fp;
 	private Transform lookAtTrans;
 
+
 	public void changeRb()
 	{
 		if (fp.targetRb == null) 
@@ -21,6 +22,7 @@ public class LookAtParticle : MonoBehaviour
 		if (lookAtTrans != null) 
 		{
 			transform.LookAt (lookAtTrans);
+           
 		}
 	}
 
